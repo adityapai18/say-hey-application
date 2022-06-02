@@ -1,22 +1,16 @@
+import { Button } from "@rneui/base";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { COLORS, FONTS, SHADOWS, SIZES } from "../constants";
 
 export const PrimaryButton = (props: any) => {
-  return (
-    <TouchableOpacity style={styles.button}>
-      <Text style={styles.text}>{props.title}</Text>
-    </TouchableOpacity>
-  );
+  return <Button style={styles.button} title={props.title} />;
 };
 const styles = StyleSheet.create({
   button: {
-    width: "90%",
+    width: "100%",
     height: 40,
     backgroundColor: COLORS.primary,
-    position: "absolute",
-    alignItems: "center",
-    justifyContent: "center",
     shadowColor: COLORS.primary,
     shadowOffset: { height: 1, width: 1 },
     shadowOpacity: 1, // IOS
@@ -24,9 +18,5 @@ const styles = StyleSheet.create({
     elevation: 2,
     borderRadius: 12,
     borderColor: COLORS.primary,
-  },
-  text: {
-    color: COLORS.white,
-    fontWeight: "bold",
   },
 });

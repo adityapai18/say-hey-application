@@ -1,12 +1,13 @@
 import React from "react";
-import { PrimaryButton } from "../components/Button";
+import { Text } from "@rneui/themed";
+import { View } from "react-native";
 
 const Home = () => {
   return (
-    <>
-      <PrimaryButton title="Continue" />
-      <PrimaryButton title="Next" />
-    </>
+    <View>
+      <Text h4>WELCOME TO 👋</Text>
+      <Text h4>SayHey</Text>
+    </View>
   );
 };
 
