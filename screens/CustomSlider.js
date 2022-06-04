@@ -2,12 +2,12 @@ import { Dimensions } from "react-native";
 import Carousel from "react-native-snap-carousel";
 import CarouselItem from "./CarouselItem";
 import styles from "./styles";
-import { View } from 'react-native';
+import { View } from "react-native";
 
 const { width } = Dimensions.get("window");
 export default function CustomSlider({ data }) {
   const settings = {
-    sliderWidth: width-40,
+    sliderWidth: width - 40,
     sliderHeight: width,
     itemWidth: width,
     data: data,
