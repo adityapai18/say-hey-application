@@ -11,12 +11,8 @@ import {
   Image,
 } from "react-native";
 import Checkbox from "expo-checkbox";
-import { PrimaryButton } from "../components/Button";
 import { COLORS, FONTS, SHADOWS } from "../constants";
 import PhoneInput from "react-native-phone-number-input";
-import logoFb from "../assets/Facebook.png";
-import logoGoogle from "../assets/Google.png";
-import logoApple from "../assets/Apple.png";
 
 const Signup = () => {
   const [isSelected, setSelection] = useState(false);
@@ -29,7 +25,7 @@ const Signup = () => {
             SAYHEY,
           </Text>
         </Text>
-        <Text h5 style={styles.subText}>
+        <Text style={styles.subText}>
           Let us get to know you better!
         </Text>
       </View>
@@ -40,7 +36,7 @@ const Signup = () => {
             lastName: "",
             email: "",
             password: "",
-            mobileNumber:""
+            mobileNumber: "",
           }}
           onSubmit={(values) => {
             console.log(values);
@@ -48,55 +44,67 @@ const Signup = () => {
         >
           {({ handleChange, handleBlur, handleSubmit, values }) => (
             <View>
-              <View style={{ marginTop: 25,justifyContent:"center",alignItems:"center" }}>
-              <TextInput
-                onChangeText={handleChange("firstName")}
-                onBlur={handleBlur("firstName")}
-                value={values.firstName}
-                placeholder="First Name"
-                style={styles.input}
-              />
-              <TextInput
-                onChangeText={handleChange("lastName")}
-                onBlur={handleBlur("lastName")}
-                value={values.lastName}
-                placeholder="Last Name"
-                style={styles.input}
-              />
-              <TextInput
-                onChangeText={handleChange("email")}
-                onBlur={handleBlur("email")}
-                value={values.email}
-                placeholder="Email"
-                style={styles.input}
-              />
-              <PhoneInput
-                defaultCode="IN"
-                layout="first"
-                containerStyle={styles.phoneContainer}
-                textContainerStyle={styles.numberInput}
-                onChangeFormattedText={text => {
-                  values.mobileNumber=text;
+              <View
+                style={{
+                  marginTop: 25,
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
-              />
-              <TextInput
-                onChangeText={handleChange("password")}
-                onBlur={handleBlur("password")}
-                value={values.password}
-                placeholder="Password"
-                style={styles.input}
-              />
-              <Text style={{ marginLeft: 12, color: "#CDCFD0",alignSelf:"flex-start" }}>
-                *minimum 6 characters
-              </Text>
+              >
+                <TextInput
+                  onChangeText={handleChange("firstName")}
+                  onBlur={handleBlur("firstName")}
+                  value={values.firstName}
+                  placeholder="First Name"
+                  style={styles.input}
+                />
+                <TextInput
+                  onChangeText={handleChange("lastName")}
+                  onBlur={handleBlur("lastName")}
+                  value={values.lastName}
+                  placeholder="Last Name"
+                  style={styles.input}
+                />
+                <TextInput
+                  onChangeText={handleChange("email")}
+                  onBlur={handleBlur("email")}
+                  value={values.email}
+                  placeholder="Email"
+                  style={styles.input}
+                />
+                <PhoneInput
+                  defaultCode="IN"
+                  layout="first"
+                  containerStyle={styles.phoneContainer}
+                  textContainerStyle={styles.numberInput}
+                  onChangeFormattedText={(text) => {
+                    values.mobileNumber = text;
+                  }}
+                />
+                <TextInput
+                  onChangeText={handleChange("password")}
+                  onBlur={handleBlur("password")}
+                  value={values.password}
+                  placeholder="Password"
+                  style={styles.input}
+                />
+                <Text
+                  style={{
+                    marginLeft: 12,
+                    color: "#CDCFD0",
+                    alignSelf: "flex-start",
+                  }}
+                >
+                  *minimum 6 characters
+                </Text>
               </View>
-              <View style={{ margin: 12, padding: 8, flexDirection: "row" }}>
+              <View style={{ margin: 12, padding: 8, flexDirection: "row",alignItems:"center" }}>
                 <Checkbox
                   color={"#0A94FF"}
                   value={isSelected}
                   onValueChange={setSelection}
                 />
-                <Text style={{ marginLeft: 15 }}>
+                <Text style={{ marginLeft: 20,letterSpacing:1 }}>
                   By clicking here I agree SAYHEY'S {"\n"}
                   <Text style={{ color: "#0A94FF" }}>
                     Terms Of Service
@@ -120,14 +128,16 @@ const Signup = () => {
             marginTop: 15,
           }}
         >
-          <Image source={logoFb} style={styles.logo} />
-          <Image source={logoApple} style={styles.logo} />
-          <Image source={logoGoogle} style={styles.logo} />
+          <Image
+            source={require("../assets/Facebook.png")}
+            style={styles.logo}
+          />
+          <Image source={require("../assets/Apple.png")} style={styles.logo} />
+          <Image source={require("../assets/Google.png")} style={styles.logo} />
         </View>
-        <Text style={{textAlign:"center",margin:25}}>
-          Already have an account? <Text style={{color:'#FF7360'}}>
-            Login
-          </Text>
+        <Text style={{ textAlign: "center", margin: 25 }}>
+          Already have an account?{" "}
+          <Text style={{ color: "#FF7360" }}>Login</Text>
         </Text>
       </View>
     </SafeAreaView>
