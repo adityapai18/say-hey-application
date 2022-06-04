@@ -1,5 +1,4 @@
 import { Text } from "@rneui/themed";
-import { useState } from "react";
 import { Formik } from "formik";
 import React from "react";
 import {
@@ -10,12 +9,9 @@ import {
   Button,
   Image,
 } from "react-native";
-import { PrimaryButton } from "../components/Button";
 import { COLORS, FONTS, SHADOWS } from "../constants";
 import PhoneInput from "react-native-phone-number-input";
-import logoFb from "../assets/Facebook.png";
-import logoGoogle from "../assets/Google.png";
-import logoApple from "../assets/Apple.png";
+
 const SignIn = () => {
   return (
     <SafeAreaView style={styles.container}>
@@ -69,9 +65,18 @@ const SignIn = () => {
                   marginTop: 15,
                 }}
               >
-                <Image source={logoFb} style={styles.logo} />
-                <Image source={logoApple} style={styles.logo} />
-                <Image source={logoGoogle} style={styles.logo} />
+                <Image
+                  source={require("../assets/Facebook.png")}
+                  style={styles.logo}
+                />
+                <Image
+                  source={require("../assets/Apple.png")}
+                  style={styles.logo}
+                />
+                <Image
+                  source={require("../assets/Google.png")}
+                  style={styles.logo}
+                />
               </View>
               <Text style={{ textAlign: "center", margin: 25 }}>
                 Already have an account?{" "}
@@ -116,6 +121,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     color: COLORS.lightgray,
     boxShadow: SHADOWS.dark,
+  },
+  logo: {
+    width: 30,
+    height: 30,
   },
 });
 
