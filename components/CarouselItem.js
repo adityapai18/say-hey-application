@@ -2,7 +2,6 @@ import React from "react";
 import { ParallaxImage } from "react-native-snap-carousel";
 import { View, Text, Pressable, SafeAreaView } from "react-native";
 import styles from "./styles";
-import * as constant from "../utilities/constant";
 
 function CarouselItem({ item, index }, parallaxProps) {
   return (

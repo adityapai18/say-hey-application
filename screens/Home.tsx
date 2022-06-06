@@ -8,15 +8,16 @@ import {
   Button,
   Image,
   ScrollView,
+  FlatList,
 } from "react-native";
 import { COLORS, FONTS, SHADOWS } from "../constants";
-import Searchbar from "../components/searchbar";
+import Searchbar from "../components/searchbar.js";
 import * as constant from "../utilities/constant";
-import { render } from "react-dom";
-import data from "./data";
-import CustomSlider from "./CustomSlider";
-import { fonts } from "@rneui/base";
-const Home = () => {
+import data from "../components/data";
+import CustomSlider from "../components/CustomSlider";
+import Card from "../components/Card";
+
+const Home = () => {    
   const [searchText, setSearchText] = useState("");
   return (
     <ScrollView>
@@ -86,6 +87,7 @@ const Home = () => {
             </Text>
           </View>
         </View>
+        <Card />
         <View
           style={{
             flexDirection: "row",
@@ -138,7 +140,7 @@ const styles = StyleSheet.create({
   container1: {
     flex: 1,
     backgroundColor: "#ffff",
-  },
+    },
 });
 // render(<Home />);
 export default Home;

@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
-import Login from "./screens/Login";
+import Home from "./screens/Home";
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
@@ -22,5 +22,5 @@ export default function App() {
 
   
   if (!loaded) return null;
-  return <Login />;
+  return <Home />;
 }
