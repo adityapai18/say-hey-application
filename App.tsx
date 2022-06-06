@@ -2,6 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import Signin from "./screens/Signin";
 import React from "react";
+import VerifyAccount from "./screens/VerifyAccount";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { useFonts } from "expo-font";
@@ -22,5 +23,5 @@ export default function App() {
 
   
   if (!loaded) return null;
-  return <Signin />;
+  return <VerifyAccount />;
 }
