@@ -5,7 +5,7 @@ import { Button } from "@rneui/base";
 
 import { COLORS, FONTS, SHADOWS } from "../constants";
 
-const DateAndTimeSelect = () => {
+const DateAndTimeScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View
@@ -136,4 +136,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default DateAndTimeSelect;
+export default DateAndTimeScreen;
