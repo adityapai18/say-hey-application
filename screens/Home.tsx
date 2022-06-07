@@ -21,7 +21,7 @@ const Home = () => {
   const [searchText, setSearchText] = useState("");
   return (
     <ScrollView>
-      <View style={{ flex: 1, marginTop: 40, padding: 20 }}>
+      <View style={{ flex: 1, padding: 20 }}>
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           <View style={{ flexDirection: "column" }}>
             <Text h4>WELCOME TO 👋</Text>

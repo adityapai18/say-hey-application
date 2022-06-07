@@ -5,6 +5,7 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { useFonts } from "expo-font";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const theme = {
   ...DefaultTheme,
@@ -13,7 +14,8 @@ const theme = {
     background: "transparent",
   },
 };
-const Stack = createStackNavigator();
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [loaded] = useFonts({
@@ -22,5 +24,9 @@ export default function App() {
 
   
   if (!loaded) return null;
-  return <Home />;
+  return (<NavigationContainer>
+  <Stack.Navigator  initialRouteName="Home">
+    <Stack.Screen name="Home" component={Home} />
+  </Stack.Navigator>
+</NavigationContainer>);
 }
