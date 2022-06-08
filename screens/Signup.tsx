@@ -9,6 +9,7 @@ import {
   TextInput,
   Button,
   Image,
+  ScrollView
 } from "react-native";
 import Checkbox from "expo-checkbox";
 import { COLORS, FONTS, SHADOWS } from "../constants";
@@ -17,6 +18,9 @@ import PhoneInput from "react-native-phone-number-input";
 const Signup = () => {
   const [isSelected, setSelection] = useState(false);
   return (
+    <ScrollView>
+
+
     <SafeAreaView style={styles.container}>
       <View>
         <Text h3 style={styles.text}>
@@ -141,6 +145,7 @@ const Signup = () => {
         </Text>
       </View>
     </SafeAreaView>
+    </ScrollView>
   );
 };
 

@@ -1,11 +1,12 @@
 import React from "react";
 import { Text } from "@rneui/themed";
-import { SafeAreaView, View, StyleSheet, TextInput, Image } from "react-native";
+import { SafeAreaView, View, StyleSheet, TextInput, Image,ScrollView } from "react-native";
 import { Button } from "@rneui/base";
 import { PrimaryButton } from "../components/Button";
 import { useState } from "react";
 import CalendarPicker from "react-native-calendar-picker";
 import { COLORS, FONTS, SHADOWS } from "../constants";
+
 const DateAndTimeSelectScreen = () => {
   const [layoutBool, setlayoutBool] = useState(Math.random() < 0.5);
   const [selectedDate, setSelectedDate] = useState(null);
@@ -15,8 +16,9 @@ const DateAndTimeSelectScreen = () => {
     console.log(date);
   };
   return (
+    <ScrollView>
     <SafeAreaView style={styles.container}>
-      <View style={{ flexDirection: "row", marginTop: 80 }}>
+      <View style={{ flexDirection: "row", marginTop: 20 }}>
         <Image source={require("../assets/Doctor.png")}></Image>
         <View style={{ justifyContent: "space-evenly", marginLeft: 20 }}>
           <Text style={[styles.text, { fontSize: 14, fontWeight: "800" }]}>
@@ -79,23 +81,23 @@ const DateAndTimeSelectScreen = () => {
             />
           </View>
         </View>
-        <View style={{ marginTop: 16 }}>
+        <View style={{ marginTop: 16,marginBottom:20 }}>
           <Text style={{ fontSize: 18, fontWeight: "bold" }}>Select Time</Text>
           <View style={{marginTop:15,flexDirection:"row",flexWrap:"wrap"}}>
               <View style={styles.time}>
                 <Text style={[styles.text,{color:"white"}]}>08:00 AM</Text>
               </View>
               <View style={[styles.time,styles.unavailableTime]}>
-                <Text style={[styles.text,{color:"#AAAAAA"}]}>08:00 AM</Text>
+                <Text style={[styles.text,{color:"#AAAAAA"}]}>09:00 AM</Text>
               </View>
               <View style={[styles.time,styles.unavailableTime]}>
-                <Text style={[styles.text,{color:"#AAAAAA"}]}>08:00 AM</Text>
+                <Text style={[styles.text,{color:"#AAAAAA"}]}>10:00 AM</Text>
               </View>
               <View style={[styles.time,styles.unavailableTime]}>
-                <Text style={[styles.text,{color:"#AAAAAA"}]}>08:00 AM</Text>
+                <Text style={[styles.text,{color:"#AAAAAA"}]}>11:00 AM</Text>
               </View>
               <View style={[styles.time,styles.unavailableTime]}>
-                <Text style={[styles.text,{color:"#AAAAAA"}]}>08:00 AM</Text>
+                <Text style={[styles.text,{color:"#AAAAAA"}]}>12:00 AM</Text>
               </View>
           </View>
         </View>
@@ -104,6 +106,7 @@ const DateAndTimeSelectScreen = () => {
               <Button title={"Make Appointment"}></Button>
       </View>
     </SafeAreaView>
+    </ScrollView>
   );
 };
 const styles = StyleSheet.create({

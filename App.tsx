@@ -7,6 +7,8 @@ import * as Font from "expo-font";
 import { useEffect, useState } from "react";
 import Home from "./screens/Home";
 import React from "react";
+import VerifyAccount from "./screens/VerifyAccount";
+import SignIn from "./screens/Signin";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { useFonts } from "expo-font";
@@ -35,7 +37,7 @@ export default function App() {
   if (!first) return null;
   return (<NavigationContainer>
   <Stack.Navigator  initialRouteName="Home">
-    <Stack.Screen name="Home" component={Home} />
+    <Stack.Screen name="Home" component={SignIn} />
   </Stack.Navigator>
 </NavigationContainer>);
 }

@@ -11,7 +11,7 @@ const DateAndTimeScreen = () => {
       <View
         style={{
           flexDirection: "row",
-          marginTop: 60,
+          marginTop: 20,
           height: 56,
           justifyContent: "space-evenly",
         }}
@@ -48,7 +48,7 @@ const DateAndTimeScreen = () => {
           style={{ margin: 12 }}
         ></Image>
       </View>
-      <View style={[styles.DateAndTime, { marginTop: 16 }]}>
+      <View style={[styles.DateAndTime, { marginTop: 20 }]}>
         <Image source={require("../assets/TimerStart.png")}></Image>
         <Text
           style={[
