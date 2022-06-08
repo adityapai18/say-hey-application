@@ -3,11 +3,15 @@ import { StyleSheet, Text, View } from "react-native";
 import DateAndTimeScreen from  "./screens/DateAndTimeScreen";
 import DateAndTimeSelectScreen from "./screens/DateAndTimeSelectScreen";
 import Signup from "./screens/Signup";
-import React, { useState } from "react";
+import * as Font from "expo-font";
+import { useEffect, useState } from "react";
+import Home from "./screens/Home";
+import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
-import * as Font from "expo-font";
-import { useEffect } from "react";
+import { useFonts } from "expo-font";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
 const theme = {
   ...DefaultTheme,
   colors: {
@@ -15,7 +19,8 @@ const theme = {
     background: "transparent",
   },
 };
-const Stack = createStackNavigator();
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [first, setfirst] = useState(false);
@@ -28,5 +33,9 @@ export default function App() {
     loadFonts();
   });
   if (!first) return null;
-  return <Signup />;
+  return (<NavigationContainer>
+  <Stack.Navigator  initialRouteName="Home">
+    <Stack.Screen name="Home" component={Home} />
+  </Stack.Navigator>
+</NavigationContainer>);
 }
