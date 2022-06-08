@@ -37,7 +37,7 @@ export default function App() {
   if (!first) return null;
   return (<NavigationContainer>
   <Stack.Navigator  initialRouteName="Home">
-    <Stack.Screen name="Home" component={SignIn} />
+    <Stack.Screen name="Home" component={DateAndTimeSelectScreen} />
   </Stack.Navigator>
 </NavigationContainer>);
 }
