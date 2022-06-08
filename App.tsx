@@ -1,12 +1,13 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import DateAndTimeScreen from  "./screens/DateAndTimeScreen";
-import React from "react";
 import DateAndTimeSelectScreen from "./screens/DateAndTimeSelectScreen";
+import Signup from "./screens/Signup";
+import React, { useState } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
-import { useFonts } from "expo-font";
-
+import * as Font from "expo-font";
+import { useEffect } from "react";
 const theme = {
   ...DefaultTheme,
   colors: {
@@ -17,11 +18,15 @@ const theme = {
 const Stack = createStackNavigator();
 
 export default function App() {
-  const [loaded] = useFonts({
-    AvenirLTStd: require("./assets/fonts/AvenirLTStd.ttf"),
+  const [first, setfirst] = useState(false);
+  const loadFonts = async () => {
+    await Font.loadAsync({
+      AvenirLTStd: require("./assets/fonts/AvenirLTStd.ttf"),
+    }).then(()=>setfirst(true))
+  };
+  useEffect(() => {
+    loadFonts();
   });
-
-  
-  if (!loaded) return null;
-  return <DateAndTimeSelectScreen />;
+  if (!first) return null;
+  return <Signup />;
 }
