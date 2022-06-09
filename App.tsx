@@ -6,6 +6,7 @@ import Signup from "./screens/Signup";
 import * as Font from "expo-font";
 import { useEffect, useState } from "react";
 import Home from "./screens/Home";
+import AppointmentDetails from "./screens/AppointmentDetails"
 import React from "react";
 import VerifyAccount from "./screens/VerifyAccount";
 import SignIn from "./screens/Signin";
@@ -38,7 +39,7 @@ export default function App() {
   if (!first) return null;
   return (<NavigationContainer>
   <Stack.Navigator  initialRouteName="Home">
-    <Stack.Screen name="Home" component={Transanction} />
+    <Stack.Screen name="Home" component={AppointmentDetails} />
   </Stack.Navigator>
 </NavigationContainer>);
 }
