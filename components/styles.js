@@ -7,10 +7,14 @@ const styles = StyleSheet.create({
   },
   container1: {
     paddingTop: 30,
-    height: 400,
+    height: 260,
   },
   title: {
     fontSize: 20,
+    fontWeight:"bold",
+  },
+  title1: {
+    fontSize: 16,
   },
   item: {
     width: "100%",
@@ -24,7 +28,8 @@ const styles = StyleSheet.create({
   },
   image: {
     ...StyleSheet.absoluteFillObject,
-    resizeMode: "contain",
+    resizeMode: "center",
+    borderRadius:30,
   },
   dotContainer: {
     backgroundColor: "rgb(230,0,0)",

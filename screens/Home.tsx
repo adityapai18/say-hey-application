@@ -14,8 +14,10 @@ import { COLORS, FONTS, SHADOWS } from "../constants";
 import Searchbar from "../components/searchbar.js";
 import * as constant from "../utilities/constant";
 import data from "../components/data";
-import CustomSlider from "../components/CustomSlider";
 import Card from "../components/Card";
+import Docslider from "../components/Slider";
+import DocCard from "../components/DocCard";
+import Activeprof from "../components/activeprof";
 
 const Home = () => {    
   const [searchText, setSearchText] = useState("");
@@ -43,7 +45,7 @@ const Home = () => {
             style={{ width: 50, height: 50, marginTop: 10, marginLeft: 7 }}
           />
         </View>
-        <CustomSlider data={data} />
+        <Docslider data={data} />
         <View>
           <Text h4>How Are You Feeling Today?</Text>
         </View>
@@ -95,8 +97,8 @@ const Home = () => {
             marginTop: 30,
           }}
         >
-          <View>
-            <Text h4>Active Professionals</Text>
+          <View style={{flexDirection:"row"}}>
+          <Image style={{width:18,height:18,marginTop:7}} source={constant.IMAGES.greendot}/><Text h4>Active Professionals</Text>
           </View>
           <View>
             <Text h4 style={{ color: COLORS.primary }}>
@@ -104,6 +106,8 @@ const Home = () => {
             </Text>
           </View>
         </View>
+        <Activeprof/>
+
         <View
           style={{
             flexDirection: "row",
@@ -120,6 +124,7 @@ const Home = () => {
             </Text>
           </View>
         </View>
+        <DocCard/>
       </View>
     </ScrollView>
   );
@@ -139,7 +144,6 @@ const styles = StyleSheet.create({
   },
   container1: {
     flex: 1,
-    backgroundColor: "#ffff",
     },
 });
 // render(<Home />);

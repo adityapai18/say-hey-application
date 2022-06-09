@@ -7,5 +7,6 @@ export const IMAGES ={
     mood2: require("../assets/mood2.png"),
     mood3: require("../assets/mood3.png"),
     mood4: require("../assets/mood4.png"),
-    pic1: require("../assets/pic1.png")
+    pic1: require("../assets/pic1.png"),
+    greendot:require("../assets/greendot.png"),
 }
