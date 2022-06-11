@@ -12,12 +12,14 @@ import VerifyAccount from "./screens/VerifyAccount";
 import SignIn from "./screens/Signin";
 import Transanction from "./screens/Transanction";
 import MyProfile from "./screens/MyProfile";
+import EditProfile from "./screens/EditProfile";
+import {CustomMenu} from "./components/CustomMenu";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { FONTS } from "./constants";
-
+import { Provider } from "react-native-paper";
 const theme = {
   ...DefaultTheme,
   colors: {
@@ -40,6 +42,7 @@ export default function App() {
   });
   if (!first) return null;
   return (
+    <Provider>
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen
@@ -54,9 +57,26 @@ export default function App() {
               color: "#404446",
               fontSize: 18,
             },
+            headerRight:()=><CustomMenu/>
+          }}
+        />
+        <Stack.Screen
+          name="EditProfile"
+          component={EditProfile}
+          options={{
+            title: "Edit Profile",
+            headerTitleAlign: "center",
+            headerTitleStyle: {
+              fontFamily: FONTS.regular,
+              fontWeight: "700",
+              color: "#404446",
+              fontSize: 18,
+            },
+            headerRight:()=><CustomMenu/>
           }}
         />
       </Stack.Navigator>
     </NavigationContainer>
+    </Provider>
   );
 }

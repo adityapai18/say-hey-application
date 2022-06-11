@@ -13,7 +13,7 @@ import { Button } from "@rneui/base";
 import { AppointmentCard } from "../components/AppointmentCard";
 import { COLORS, FONTS, SHADOWS } from "../constants";
 
-const Transanction = () => {
+const MyProfile = ({navigation}:any) => {
   return (
     <ScrollView>
       <SafeAreaView style={styles.container}>
@@ -58,7 +58,7 @@ const Transanction = () => {
           <Pressable
             style={styles.button}
             onPress={() => {
-              console.log("pressed");
+              navigation.navigate("EditProfile");
             }}
           >
             <Text
@@ -184,4 +184,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Transanction;
+export default MyProfile;
