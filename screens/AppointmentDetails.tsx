@@ -15,8 +15,8 @@ import { COLORS, FONTS, SHADOWS } from "../constants";
 
 const Transanction = () => {
   return (
-    <ScrollView>
-      <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <ScrollView>
         <DoctorCard
           name="Dr Usman Yusuf"
           qualification="M.B.B.S , Psychiatrist , MD"
@@ -123,40 +123,88 @@ const Transanction = () => {
             Patient's Information
           </Text>
         </View>
-        <View style={{margin:12,padding:12,backgroundColor:"white",borderRadius:12}}>
-            <Text style={[styles.text,{fontSize:16,fontWeight:"800"}]}>
-              Patient Name
-            </Text>
-            <Text style={[styles.text,{fontSize:12,fontWeight:"300",marginTop:4}]}>
-              Amanda Monopoe
-            </Text>
+        <View
+          style={{
+            margin: 12,
+            padding: 12,
+            backgroundColor: "white",
+            borderRadius: 12,
+          }}
+        >
+          <Text style={[styles.text, { fontSize: 16, fontWeight: "800" }]}>
+            Patient Name
+          </Text>
+          <Text
+            style={[
+              styles.text,
+              { fontSize: 12, fontWeight: "300", marginTop: 4 },
+            ]}
+          >
+            Amanda Monopoe
+          </Text>
         </View>
-        <View style={{margin:12,padding:12,backgroundColor:"white",borderRadius:12}}>
-            <Text style={[styles.text,{fontSize:16,fontWeight:"800"}]}>
-              Age
-            </Text>
-            <Text style={[styles.text,{fontSize:12,fontWeight:"300",marginTop:4}]}>
-              35 years old
-            </Text>
+        <View
+          style={{
+            margin: 12,
+            padding: 12,
+            backgroundColor: "white",
+            borderRadius: 12,
+          }}
+        >
+          <Text style={[styles.text, { fontSize: 16, fontWeight: "800" }]}>
+            Age
+          </Text>
+          <Text
+            style={[
+              styles.text,
+              { fontSize: 12, fontWeight: "300", marginTop: 4 },
+            ]}
+          >
+            35 years old
+          </Text>
         </View>
-        <View style={{margin:12,padding:12,backgroundColor:"white",borderRadius:12}}>
-            <Text style={[styles.text,{fontSize:16,fontWeight:"800"}]}>
-              Gender
-            </Text>
-            <Text style={[styles.text,{fontSize:12,fontWeight:"300",marginTop:4}]}>
-              Female
-            </Text>
+        <View
+          style={{
+            margin: 12,
+            padding: 12,
+            backgroundColor: "white",
+            borderRadius: 12,
+          }}
+        >
+          <Text style={[styles.text, { fontSize: 16, fontWeight: "800" }]}>
+            Gender
+          </Text>
+          <Text
+            style={[
+              styles.text,
+              { fontSize: 12, fontWeight: "300", marginTop: 4 },
+            ]}
+          >
+            Female
+          </Text>
         </View>
-        <View style={{margin:12,padding:12,backgroundColor:"white",borderRadius:12}}>
-            <Text style={[styles.text,{fontSize:16,fontWeight:"800"}]}>
-              Problems
-            </Text>
-            <Text style={[styles.text,{fontSize:12,fontWeight:"300",marginTop:4}]}>
-              Broken Marriage, Family Problems & Feeling sad
-            </Text>
+        <View
+          style={{
+            margin: 12,
+            padding: 12,
+            backgroundColor: "white",
+            borderRadius: 12,
+          }}
+        >
+          <Text style={[styles.text, { fontSize: 16, fontWeight: "800" }]}>
+            Problems
+          </Text>
+          <Text
+            style={[
+              styles.text,
+              { fontSize: 12, fontWeight: "300", marginTop: 4 },
+            ]}
+          >
+            Broken Marriage, Family Problems & Feeling sad
+          </Text>
         </View>
-      </SafeAreaView>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 

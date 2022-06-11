@@ -15,7 +15,7 @@ import { Button } from "@rneui/base";
 import * as ImagePicker from "expo-image-picker";
 import { COLORS, FONTS, SHADOWS, SIZES } from "../constants";
 
-const EditProfile = ({navigation}:any) => {
+const EditProfile = ({ navigation }: any) => {
   const [image, setImage] = useState("");
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
@@ -34,8 +34,8 @@ const EditProfile = ({navigation}:any) => {
     }
   };
   return (
-    <ScrollView>
-      <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <ScrollView>
         <View
           style={{
             marginTop: 15,
@@ -202,8 +202,8 @@ const EditProfile = ({navigation}:any) => {
             Done
           </Text>
         </Pressable>
-      </SafeAreaView>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 

@@ -45,6 +45,10 @@ export default function App() {
     <Provider>
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen 
+        name="SignUp"
+        component={SignIn}
+        ></Stack.Screen>
         <Stack.Screen
           name="Profile"
           component={MyProfile}
