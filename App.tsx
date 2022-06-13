@@ -13,13 +13,13 @@ import SignIn from "./screens/Signin";
 import Transanction from "./screens/Transanction";
 import MyProfile from "./screens/MyProfile";
 import EditProfile from "./screens/EditProfile";
-import {CustomMenu} from "./components/CustomMenu";
+import { CustomMenu } from "./components/CustomMenu";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { FONTS } from "./constants";
-import { Provider } from "react-native-paper";
+import { Provider as PaperProvider } from "react-native-paper";
 const theme = {
   ...DefaultTheme,
   colors: {
@@ -42,45 +42,76 @@ export default function App() {
   });
   if (!first) return null;
   return (
-    <Provider>
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen 
-        name="SignUp"
-        component={SignIn}
-        ></Stack.Screen>
-        <Stack.Screen
-          name="Profile"
-          component={MyProfile}
-          options={{
-            title: "My Profile",
-            headerTitleAlign: "center",
-            headerTitleStyle: {
-              fontFamily: FONTS.regular,
-              fontWeight: "700",
-              color: "#404446",
-              fontSize: 18,
-            },
-            headerRight:()=><CustomMenu/>
-          }}
-        />
-        <Stack.Screen
-          name="EditProfile"
-          component={EditProfile}
-          options={{
-            title: "Edit Profile",
-            headerTitleAlign: "center",
-            headerTitleStyle: {
-              fontFamily: FONTS.regular,
-              fontWeight: "700",
-              color: "#404446",
-              fontSize: 18,
-            },
-            headerRight:()=><CustomMenu/>
-          }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
-    </Provider>
+    <PaperProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Home">
+          <Stack.Screen
+            name="Home"
+            component={Home}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="DateAndTimeScreen"
+            component={DateAndTimeScreen}
+            options={{
+              title: "Book Appointment",
+              headerTitleAlign: "center",
+              headerTitleStyle: {
+                fontFamily: FONTS.regular,
+                fontWeight: "700",
+                color: "#404446",
+                fontSize: 18,
+              },
+            }}
+          />
+          <Stack.Screen
+            name="DateAndTimeSelect"
+            component={DateAndTimeSelectScreen}
+            options={{
+              title: "Make Appointment",
+              headerTitleAlign: "center",
+              headerTitleStyle: {
+                fontFamily: FONTS.regular,
+                fontWeight: "700",
+                color: "#404446",
+                fontSize: 18,
+              },
+            }}
+          />
+          <Stack.Screen
+            name="Profile"
+            component={MyProfile}
+            options={{
+              title: "My Profile",
+              headerTitleAlign: "center",
+              headerTitleStyle: {
+                fontFamily: FONTS.regular,
+                fontWeight: "700",
+                color: "#404446",
+                fontSize: 18,
+              },
+              headerRight: () => <CustomMenu />,
+            }}
+          />
+          <Stack.Screen
+            name="EditProfile"
+            component={EditProfile}
+            options={{
+              title: "Edit Profile",
+              headerTitleAlign: "center",
+              headerTitleStyle: {
+                fontFamily: FONTS.regular,
+                fontWeight: "700",
+                color: "#404446",
+                fontSize: 18,
+              },
+              headerRight: () => <CustomMenu />,
+            }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </PaperProvider>
   );
 }

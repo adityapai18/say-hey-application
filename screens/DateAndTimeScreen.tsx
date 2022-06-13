@@ -1,11 +1,10 @@
 import { Text } from "@rneui/themed";
 import React from "react";
-import { SafeAreaView, View, StyleSheet, TextInput, Image } from "react-native";
+import { SafeAreaView, View, StyleSheet, TextInput, Image, Pressable, TouchableOpacity } from "react-native";
 import { Button } from "@rneui/base";
-
 import { COLORS, FONTS, SHADOWS } from "../constants";
 
-const DateAndTimeScreen = () => {
+const DateAndTimeScreen = ({navigation}:any) => {
   return (
     <SafeAreaView style={styles.container}>
       <View
@@ -39,7 +38,9 @@ const DateAndTimeScreen = () => {
           Date
         </Text>
       </View>
-      <View style={styles.SetDateAndTime}>
+      <Pressable style={styles.SetDateAndTime}
+      onPress={()=>{navigation.navigate("DateAndTimeSelect",true)}}
+      >
         <Text style={{ fontSize: 16, fontWeight: "300", margin: 12 }}>
           Set the date
         </Text>
@@ -47,7 +48,7 @@ const DateAndTimeScreen = () => {
           source={require("../assets/RightArrow.png")}
           style={{ margin: 12 }}
         ></Image>
-      </View>
+      </Pressable>
       <View style={[styles.DateAndTime, { marginTop: 20 }]}>
         <Image source={require("../assets/TimerStart.png")}></Image>
         <Text
@@ -59,7 +60,8 @@ const DateAndTimeScreen = () => {
           Time
         </Text>
       </View>
-      <View style={styles.SetDateAndTime} >
+      <Pressable style={styles.SetDateAndTime} 
+      onPress={()=>{navigation.navigate("DateAndTimeSelect",false)}}>
         <Text style={{ fontSize: 16, fontWeight: "300", margin: 12 }}>
           Set the time of Appointment
         </Text>
@@ -67,7 +69,7 @@ const DateAndTimeScreen = () => {
           source={require("../assets/RightArrow.png")}
           style={{ margin: 12 }}
         ></Image>
-      </View>
+      </Pressable>
       <View style={styles.bottom}>
         <Button title="Next" style={styles.button} />
       </View>

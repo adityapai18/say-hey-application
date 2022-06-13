@@ -1,111 +1,227 @@
 import React from "react";
 import { Text } from "@rneui/themed";
-import { SafeAreaView, View, StyleSheet, TextInput, Image,ScrollView } from "react-native";
+import {
+  SafeAreaView,
+  View,
+  StyleSheet,
+  TextInput,
+  Image,
+  ScrollView,
+  Pressable,
+} from "react-native";
 import { Button } from "@rneui/base";
 import { PrimaryButton } from "../components/Button";
 import { useState } from "react";
 import CalendarPicker from "react-native-calendar-picker";
 import { COLORS, FONTS, SHADOWS } from "../constants";
 
-const DateAndTimeSelectScreen = () => {
+const DateAndTimeSelectScreen = ({navigation,route}:any) => {
+  const presetTime = {
+    avlAt8: false,
+    avlAt9: false,
+    avlAt10: false,
+    avlAt11: false,
+    avlAt12: false,
+  };
+  const [timeObj, setTimeObj] = useState({
+    avlAt8: false,
+    avlAt9: false,
+    avlAt10: false,
+    avlAt11: false,
+    avlAt12: false,
+  });
   const [layoutBool, setlayoutBool] = useState(Math.random() < 0.5);
   const [selectedDate, setSelectedDate] = useState(null);
-
   const onDateChange = (date: any, type: any) => {
     setSelectedDate(date);
     console.log(date);
   };
   return (
     <ScrollView>
-    <SafeAreaView style={styles.container}>
-      <View style={{ flexDirection: "row", marginTop: 20 }}>
-        <Image source={require("../assets/Doctor.png")}></Image>
-        <View style={{ justifyContent: "space-evenly", marginLeft: 20 }}>
-          <Text style={[styles.text, { fontSize: 14, fontWeight: "800" }]}>
-            Dr. Cipay Mahalani
-          </Text>
-          <Text
-            style={[
-              styles.text,
-              { fontSize: 14, fontWeight: "400", color: "#AAAAAA" },
-            ]}
-          >
-            Dermatologist Specialist
-          </Text>
-          <Text
-            style={[
-              styles.text,
-              { fontSize: 14, fontWeight: "400", color: "#AAAAAA" },
-            ]}
-          >
-            Cempaka Hospital
-          </Text>
-        </View>
-      </View>
-      <View style={{ flexDirection: layoutBool ? "column" : "column-reverse" }}>
-        <View style={{ marginTop: 32 }}>
-          <Text style={{ fontSize: 18, fontWeight: "bold" }}>Pick a date</Text>
-          <View style={{ marginTop: 16 }}>
-            <CalendarPicker
-              allowRangeSelection={false}
-              minDate={new Date(2018, 1, 1)}
-              maxDate={new Date(2050, 6, 3)}
-              nextTitle=">"
-              previousTitle="<"
-              previousTitleStyle={styles.calendar}
-              nextTitleStyle={styles.calendar}
-              weekdays={["Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"]}
-              months={[
-                "January",
-                "Febraury",
-                "March",
-                "April",
-                "May",
-                "June",
-                "July",
-                "August",
-                "September",
-                "October",
-                "November",
-                "December",
+      <SafeAreaView style={styles.container}>
+        <View style={{ flexDirection: "row", marginTop: 20 }}>
+          <Image source={require("../assets/Doctor.png")}></Image>
+          <View style={{ justifyContent: "space-evenly", marginLeft: 20 }}>
+            <Text style={[styles.text, { fontSize: 14, fontWeight: "800" }]}>
+              Dr. Cipay Mahalani
+            </Text>
+            <Text
+              style={[
+                styles.text,
+                { fontSize: 14, fontWeight: "400", color: "#AAAAAA" },
               ]}
-              todayBackgroundColor="#ADD8E6"
-              selectedDayColor="#054A80"
-              selectedDayTextColor="#FFFFFF"
-              scaleFactor={375}
-              textStyle={{
-                fontFamily: FONTS.regular,
-                color: "#000000",
-              }}
-              onDateChange={onDateChange}
-            />
+            >
+              Dermatologist Specialist
+            </Text>
+            <Text
+              style={[
+                styles.text,
+                { fontSize: 14, fontWeight: "400", color: "#AAAAAA" },
+              ]}
+            >
+              Cempaka Hospital
+            </Text>
           </View>
         </View>
-        <View style={{ marginTop: 16,marginBottom:20 }}>
-          <Text style={{ fontSize: 18, fontWeight: "bold" }}>Select Time</Text>
-          <View style={{marginTop:15,flexDirection:"row",flexWrap:"wrap"}}>
-              <View style={styles.time}>
-                <Text style={[styles.text,{color:"white"}]}>08:00 AM</Text>
-              </View>
-              <View style={[styles.time,styles.unavailableTime]}>
+        <View
+          style={{ flexDirection: route.params ? "column" : "column-reverse" }}
+        >
+          <View style={{ marginTop: 16 }}>
+            <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+              Pick a date
+            </Text>
+            <View style={{ marginTop: 16 }}>
+              <CalendarPicker
+                allowRangeSelection={false}
+                minDate={new Date(2018, 1, 1)}
+                maxDate={new Date(2050, 6, 3)}
+                nextTitle=">"
+                previousTitle="<"
+                previousTitleStyle={styles.calendar}
+                nextTitleStyle={styles.calendar}
+                weekdays={["Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"]}
+                months={[
+                  "January",
+                  "Febraury",
+                  "March",
+                  "April",
+                  "May",
+                  "June",
+                  "July",
+                  "August",
+                  "September",
+                  "October",
+                  "November",
+                  "December",
+                ]}
+                todayBackgroundColor="#ADD8E6"
+                selectedDayColor="#054A80"
+                selectedDayTextColor="#FFFFFF"
+                scaleFactor={375}
+                textStyle={{
+                  fontFamily: FONTS.regular,
+                  color: "#000000",
+                }}
+                onDateChange={onDateChange}
+              />
+            </View>
+          </View>
+          <View style={{ marginTop: 16, marginBottom: 20 }}>
+            <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+              Select Time
+            </Text>
+            <View
+              style={{ marginTop: 15, flexDirection: "row", flexWrap: "wrap" }}
+            >
+              <Pressable
+                style={[
+                  styles.time,
+                  timeObj.avlAt8 ? styles.availableTime : {},
+                ]}
+                onPress={() => {
+                  setTimeObj({ ...presetTime, avlAt8: true });
+                }}
+              >
+                <Text
+                  style={[
+                    styles.text,
+                    { color: timeObj.avlAt8 ? "white" : "#AAAAAA" },
+                  ]}
+                >
+                  08:00 AM
+                </Text>
+              </Pressable>
+              <Pressable
+                style={[
+                  styles.time,
+                  timeObj.avlAt9 ? styles.availableTime : {},
+                ]}
+                onPress={() => {
+                  setTimeObj({ ...presetTime, avlAt9: true });
+                }}
+              >
+                <Text
+                  style={[
+                    styles.text,
+                    { color: timeObj.avlAt9 ? "white" : "#AAAAAA" },
+                  ]}
+                >
+                  09:00 AM
+                </Text>
+              </Pressable>
+              <Pressable
+                style={[
+                  styles.time,
+                  timeObj.avlAt10 ? styles.availableTime : {},
+                ]}
+                onPress={() => {
+                  setTimeObj({ ...presetTime, avlAt10: true });
+                }}
+              >
+                <Text
+                  style={[
+                    styles.text,
+                    { color: timeObj.avlAt10 ? "white" : "#AAAAAA" },
+                  ]}
+                >
+                  10:00 AM
+                </Text>
+              </Pressable>
+              <Pressable
+                style={[
+                  styles.time,
+                  timeObj.avlAt11 ? styles.availableTime : {},
+                ]}
+                onPress={() => {
+                  setTimeObj({ ...presetTime, avlAt11: true });
+                }}
+              >
+                <Text
+                  style={[
+                    styles.text,
+                    { color: timeObj.avlAt11 ? "white" : "#AAAAAA" },
+                  ]}
+                >
+                  11:00 AM
+                </Text>
+              </Pressable>
+              <Pressable
+                style={[
+                  styles.time,
+                  timeObj.avlAt12 ? styles.availableTime : {},
+                ]}
+                onPress={() => {
+                  setTimeObj({ ...presetTime, avlAt12: true });
+                }}
+              >
+                <Text
+                  style={[
+                    styles.text,
+                    { color: timeObj.avlAt12 ? "white" : "#AAAAAA" },
+                  ]}
+                >
+                  12:00 AM
+                </Text>
+              </Pressable>
+              {/* <Pressable style={styles.time}>
                 <Text style={[styles.text,{color:"#AAAAAA"}]}>09:00 AM</Text>
-              </View>
-              <View style={[styles.time,styles.unavailableTime]}>
+              </Pressable>
+              <Pressable style={styles.time}>
                 <Text style={[styles.text,{color:"#AAAAAA"}]}>10:00 AM</Text>
-              </View>
-              <View style={[styles.time,styles.unavailableTime]}>
+              </Pressable>
+              <Pressable style={styles.time}>
                 <Text style={[styles.text,{color:"#AAAAAA"}]}>11:00 AM</Text>
-              </View>
-              <View style={[styles.time,styles.unavailableTime]}>
+              </Pressable>
+              <Pressable style={styles.time}>
                 <Text style={[styles.text,{color:"#AAAAAA"}]}>12:00 AM</Text>
-              </View>
+              </Pressable> */}
+            </View>
           </View>
         </View>
-      </View>
-      <View style={styles.bottom}>
-              <Button title={"Make Appointment"}></Button>
-      </View>
-    </SafeAreaView>
+        <View style={styles.bottom}>
+          <Button title={"Make Appointment"}></Button>
+        </View>
+      </SafeAreaView>
     </ScrollView>
   );
 };
@@ -126,15 +242,7 @@ const styles = StyleSheet.create({
     color: COLORS.gray,
     textAlign: "center",
   },
-  input: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 8,
-    height: 56,
-    boxShadow: SHADOWS.dark,
-    marginTop: 25,
-    padding: 8,
-    color: COLORS.lightgray,
-  },
+
   detailCell: {
     alignItems: "center",
     justifyContent: "center",
@@ -160,6 +268,7 @@ const styles = StyleSheet.create({
   bottom: {
     flex: 1,
     justifyContent: "flex-end",
+    marginTop: 15,
     marginBottom: 30,
   },
   button: {
@@ -172,21 +281,21 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginHorizontal: 20,
   },
-  time:{
-      width:93,
-      height:42,
-      borderRadius:9,
-      backgroundColor:"#054A80",
-      justifyContent:"center",
-      alignItems:"center",
-      marginHorizontal:5,
-      marginVertical:7
+  time: {
+    width: 93,
+    height: 42,
+    borderRadius: 9,
+    justifyContent: "center",
+    alignItems: "center",
+    marginHorizontal: 5,
+    marginVertical: 7,
+    backgroundColor: "transparent",
+    borderColor: "#CCCCCC",
+    borderWith: 1,
   },
-  unavailableTime:{
-    backgroundColor:"transparent",
-    borderColor:"#CCCCCC",
-    borderWidth:1
-  }
+  availableTime: {
+    backgroundColor: "#054A80",
+  },
 });
 
 export default DateAndTimeSelectScreen;
