@@ -5,7 +5,7 @@ import DateAndTimeSelectScreen from "./screens/DateAndTimeSelectScreen";
 import Signup from "./screens/Signup";
 import * as Font from "expo-font";
 import { useEffect, useState } from "react";
-import Home from "./screens/Home";
+import Home2 from "./screens/Home2";
 import AppointmentDetails from "./screens/AppointmentDetails";
 import React from "react";
 import VerifyAccount from "./screens/VerifyAccount";
@@ -47,7 +47,7 @@ export default function App() {
         <Stack.Navigator initialRouteName="Home">
           <Stack.Screen
             name="Home"
-            component={Home}
+            component={Home2}
             options={{
               headerShown: false,
             }}
