@@ -15,10 +15,12 @@ const SearchBar = ({
   setSearchPhrase,
   setClicked,
   PlaceHolder,
+  widthComplete="85%",
+  widthText="95%"
 }: any) => {
   return (
-    <View style={styles.container}>
-      <View style={styles.searchBar__unclicked}>
+    <View style={[styles.container,{width:widthComplete}]}>
+      <View style={[styles.searchBar__unclicked,{width:widthText}]}>
         {/* search Icon */}
         <Image source={require("../assets/SearchIcon.png")} />
         {/* Input field */}
@@ -45,7 +47,9 @@ const SearchBar = ({
       </View>
     </View>
   );
+  
 };
+
 export default SearchBar;
 
 // styles

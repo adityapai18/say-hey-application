@@ -11,7 +11,7 @@ import {
 import SearchBar from "../components/SearchBar";
 import CarouselCard from "../components/CarouselCards";
 import { COLORS, FONTS, SHADOWS } from "../constants";
-import { ScheduleCard } from "../components/ScheduleCard";
+import { ScheduleCardHome } from "../components/ScheduleCardHome";
 import { ActDocCircle } from "../components/ActDocCircle";
 import { DoctorReviewCard } from "../components/DoctorReviewCard";
 const Home2 = ({ navigation }: any) => {
@@ -115,7 +115,7 @@ const Home2 = ({ navigation }: any) => {
             </Text>
           </Pressable>
         </View>
-        <ScheduleCard />
+        <ScheduleCardHome />
         <View
           style={{
             flexDirection: "row",
@@ -187,7 +187,10 @@ const Home2 = ({ navigation }: any) => {
         </ScrollView>
       </SafeAreaView>
       <View style={styles.bottomNav}>
-        <Pressable style={{ justifyContent: "center", alignItems: "center" }}>
+        <Pressable style={{ justifyContent: "center", alignItems: "center" }}
+        onPress={() => {
+          navigation.navigate("ScheduleScreen");
+        }}>
           <Image source={require("../assets/Home.png")}></Image>
           <Text
             style={[

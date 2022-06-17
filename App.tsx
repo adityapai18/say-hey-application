@@ -11,8 +11,10 @@ import React from "react";
 import VerifyAccount from "./screens/VerifyAccount";
 import SignIn from "./screens/Signin";
 import Transanction from "./screens/Transanction";
+import NotificationScreen from "./screens/NotificationScreen";
 import MyProfile from "./screens/MyProfile";
 import EditProfile from "./screens/EditProfile";
+import ScheduleScreen from "./screens/ScheduleScreen";
 import { CustomMenu } from "./components/CustomMenu";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
@@ -50,6 +52,34 @@ export default function App() {
             component={Home2}
             options={{
               headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="ScheduleScreen"
+            component={ScheduleScreen}
+            options={{
+              title: "My Appointments",
+              headerTitleAlign: "center",
+              headerTitleStyle: {
+                fontFamily: FONTS.regular,
+                fontWeight: "700",
+                color: "#404446",
+                fontSize: 18,
+              },
+            }}
+          />
+          <Stack.Screen
+            name="NotificationScreen"
+            component={NotificationScreen}
+            options={{
+              title: "Notifications",
+              headerTitleAlign: "center",
+              headerTitleStyle: {
+                fontFamily: FONTS.regular,
+                fontWeight: "700",
+                color: "#404446",
+                fontSize: 18,
+              },
             }}
           />
           <Stack.Screen
