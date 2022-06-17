@@ -187,10 +187,7 @@ const Home2 = ({ navigation }: any) => {
         </ScrollView>
       </SafeAreaView>
       <View style={styles.bottomNav}>
-        <Pressable style={{ justifyContent: "center", alignItems: "center" }}
-        onPress={() => {
-          navigation.navigate("ScheduleScreen");
-        }}>
+        <Pressable style={{ justifyContent: "center", alignItems: "center" }}>
           <Image source={require("../assets/Home.png")}></Image>
           <Text
             style={[
@@ -201,7 +198,12 @@ const Home2 = ({ navigation }: any) => {
             Home
           </Text>
         </Pressable>
-        <Pressable style={{ justifyContent: "center", alignItems: "center" }}>
+        <Pressable
+          style={{ justifyContent: "center", alignItems: "center" }}
+          onPress={() => {
+            navigation.navigate("ScheduleScreen");
+          }}
+        >
           <Image source={require("../assets/Schedule.png")}></Image>
           <Text
             style={[
