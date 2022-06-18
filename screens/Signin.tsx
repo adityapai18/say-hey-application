@@ -1,6 +1,6 @@
 import { Text } from "@rneui/themed";
 import { Formik } from "formik";
-import React from "react";
+import React, { useState } from "react";
 import {
   SafeAreaView,
   View,
@@ -10,9 +10,19 @@ import {
   Image,
 } from "react-native";
 import { COLORS, FONTS, SHADOWS } from "../constants";
-import PhoneInput from "react-native-phone-number-input";
-
-const SignIn = () => {
+// import PhoneInput from "react-native-phone-number-input";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebase";
+const SignIn = ({ navigation }: any) => {
+  const signInAuth=(value:any)=>
+  {
+    signInWithEmailAndPassword(auth,value.email,value.password)
+    .then((authUser) => {
+      console.log(authUser);
+      alert("Login Successful")
+    })
+    .catch((error) => alert(error.message))
+  }
   return (
     <SafeAreaView style={styles.container}>
       <View>
@@ -26,29 +36,51 @@ const SignIn = () => {
       <View>
         <Formik
           initialValues={{
-            mobileNumber: "",
+            password: "",
+            email:""
           }}
-          onSubmit={(values) => console.log(values)}
+          onSubmit={(values) => {
+            signInAuth(values);
+          }}
         >
           {({ handleChange, handleBlur, handleSubmit, values }) => (
             <View style={{ marginTop: 25 }}>
-              <PhoneInput
+              {/* <PhoneInput
                 value={values.mobileNumber}
                 defaultCode="IN"
                 layout="first"
                 containerStyle={styles.phoneContainer}
                 textContainerStyle={styles.numberInput}
+                onChangeFormattedText={(text) => {
+                  values.mobileNumber = text;
+                }}
+              /> */}
+              <TextInput
+                onChangeText={handleChange("email")}
+                onBlur={handleBlur("email")}
+                value={values.email}
+                placeholder="Email"
+                autoComplete="email"
+                style={styles.input}
+              />
+              <TextInput
+                onChangeText={handleChange("password")}
+                onBlur={handleBlur("password")}
+                value={values.password}
+                placeholder="Password"
+                textContentType="password"
+                style={styles.input}
               />
               <View style={{ marginTop: "30%" }}>
                 <Button
                   color={"#0A94FF"}
-                  title="Send OTP"
+                  title="Login"
                   onPress={handleSubmit}
                 />
               </View>
-              <Text style={{ textAlign: "center", margin: 15 }}>
+              {/* <Text style={{ textAlign: "center", margin: 15 }}>
                 Signin with <Text style={{ color: "#FF7360" }}>Password</Text>
-              </Text>
+              </Text> */}
               <Text
                 style={{
                   marginTop: 25,
@@ -92,7 +124,7 @@ const SignIn = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
+    flex: 1,
     paddingLeft: 16,
     paddingRight: 16,
     paddingTop: 16,
@@ -102,6 +134,16 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     textAlign: "center",
     marginTop: 15,
+  },
+  input: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 8,
+    height: 56,
+    boxShadow: SHADOWS.dark,
+    margin: 12,
+    padding: 8,
+    color: COLORS.lightgray,
+    width: "95%",
   },
   subText: {
     fontFamily: FONTS.regular,
