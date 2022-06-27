@@ -10,6 +10,7 @@ import { useFonts } from "expo-font";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import RootNavigation from './navigation';
 import { FONTS } from "./constants";
+import { ProvideAuth } from "./lib/auth/AuthContext";
 const theme = {
   ...DefaultTheme,
   colors: {
@@ -31,7 +32,9 @@ export default function App() {
   });
   if (!first) return null;
   return (
+    <ProvideAuth>
     <RootNavigation/>
+    </ProvideAuth>
       // <NavigationContainer>
       //   <Stack.Navigator initialRouteName="Home">
       //     <Stack.Screen

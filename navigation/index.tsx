@@ -1,8 +1,7 @@
-import { useAuthentication } from '../utilities/hooks/useAuthentication';
 import UserStack from './userStack';
 import AuthStack from './authStack';
+import { useAuth } from '../lib/auth/AuthContext';
 export default function RootNavigation() {
-    const { user } = useAuthentication();
-  
-    return user ? <UserStack /> : <AuthStack />;
+    const auth = useAuth();
+    return auth.user ? <UserStack /> : <AuthStack />;
   }
