@@ -5,15 +5,23 @@ import {
   signOut,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
+  updateProfile,
   User,
 } from "firebase/auth";
-interface Authcon{
+import axios from "axios";
+interface Authcon {
   user: User | undefined;
   signin: (email: string, password: string) => void;
-  signup: (email: string, password: string) => void;
+  signup: (
+    email: string,
+    password: string,
+    firstName: string,
+    lastName: string
+  ) => void;
   signout: () => void;
+  trial:()=>void;
 }
-const authContext = createContext<Authcon|null>(null);
+const authContext = createContext<Authcon | null>(null);
 
 export function ProvideAuth({ children }: any) {
   const auth = useProvideAuth();
@@ -31,18 +39,46 @@ function useProvideAuth() {
       return response.user;
     });
   };
-  const signup = (email: string, password: string) => {
-    createUserWithEmailAndPassword(auth, email, password).then(
-      (response: any) => {
-        setUser(response.user);
-        return response.user;
-      }
-    );
+  const signup = (
+    email: string,
+    password: string,
+    firstName: string,
+    lastName: string
+  ) => {
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((response: any) => {
+        updateProfile(response.user, {
+          displayName: firstName + " " + lastName,
+        })
+          .then(() => {
+            setUser(response.user);
+            addUser(response)
+            return response;
+          })
+          .catch((error: any) => {
+            alert(error.message);
+            return;
+          });
+      })
+      .catch((error: Error) => {
+        alert(error.message);
+      });
   };
   const signout = () => {
     signOut(auth).then(() => {
       setUser(undefined);
     });
+  };
+  const addUser = (tokenData: any) => {
+    console.log(tokenData)
+    console.log(tokenData.user)
+    axios
+      .post("https://shielded-caverns-63372.herokuapp.com/api/user", tokenData.user)
+      .then((response) => {
+        console.log(response);
+      }).catch(error=>{
+        console.log(error.message);
+      });
   };
   //   const sendPasswordResetEmail = (email) => {
   //     return firebase
@@ -60,9 +96,9 @@ function useProvideAuth() {
   //         return true;
   //       });
   //   };
-  
+
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth,(user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUser(user);
       } else {
@@ -77,7 +113,8 @@ function useProvideAuth() {
     user,
     signin,
     signup,
-    signout
+    signout,
+    addUser,
     // sendPasswordResetEmail,
     // confirmPasswordReset,
   };

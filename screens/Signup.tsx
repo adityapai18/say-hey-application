@@ -19,27 +19,12 @@ import {
   createUserWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
-import { auth } from "../firebase";
+import { useAuth } from '../lib/auth/AuthContext'; 
 const Signup = ({navigation}:any) => {
   const [isSelected, setSelection] = useState(false);
+  const auth = useAuth();
   function signUpFunc(value: any) {
-    console.log(value);
-    createUserWithEmailAndPassword(auth, value.email, value.password)
-      .then((authUser: any) => {
-        updateProfile(authUser.user, {
-          displayName: value.firstName + " " + value.lastName,
-        })
-          .then(() => {
-            console.log(authUser.user);
-          })
-          .catch((error: any) => {
-            console.log(error);
-            return;
-          });
-        })
-      .catch((error: Error) => {
-        alert(error.message);
-      });
+    auth?.signup(value.email,value.password,value.firstName,value.lastName);
   }
   return (
     <ScrollView>
@@ -150,7 +135,7 @@ const Signup = ({navigation}:any) => {
                 </View>
                 <Button
                   color={"#0A94FF"}
-                  title="Submit"
+                  title="Submit"  
                   onPress={handleSubmit}
                 />
               </View>
