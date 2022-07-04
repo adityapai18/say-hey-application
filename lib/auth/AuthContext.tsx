@@ -52,7 +52,7 @@ function useProvideAuth() {
         })
           .then(() => {
             setUser(response.user);
-            addUser(response)
+            addUser(response,password)
             return response;
           })
           .catch((error: any) => {
@@ -69,11 +69,12 @@ function useProvideAuth() {
       setUser(undefined);
     });
   };
-  const addUser = (tokenData: any) => {
+  const addUser = (tokenData: any, password:string) => {
     console.log(tokenData)
     console.log(tokenData.user)
     axios
-      .post("https://shielded-caverns-63372.herokuapp.com/api/user", tokenData.user)
+    // https://shielded-caverns-63372.herokuapp.com/api/user
+      .post("http://192.168.29.254:3000/api/user", {...tokenData.user,password})
       .then((response) => {
         console.log(response);
       }).catch(error=>{

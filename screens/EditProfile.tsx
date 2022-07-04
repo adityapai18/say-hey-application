@@ -11,12 +11,11 @@ import {
   ImageBackground,
   Switch,
 } from "react-native";
-import { Button } from "@rneui/base";
 import * as ImagePicker from "expo-image-picker";
 import { COLORS, FONTS, SHADOWS, SIZES } from "../constants";
 
 const EditProfile = ({ navigation }: any) => {
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState('');
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
   const pickImage = async () => {

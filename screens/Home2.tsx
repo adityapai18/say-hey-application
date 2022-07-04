@@ -70,7 +70,14 @@ const Home2 = ({ navigation }: any) => {
             ></Image>
           </View>
         </View>
-        <View style={{ marginTop: 25, justifyContent: "center" }}>
+        <View
+          style={{
+            marginTop: 25,
+            justifyContent: "center",
+            flex: 1,
+            alignContent: "center",
+          }}
+        >
           <CarouselCard />
         </View>
         <Text

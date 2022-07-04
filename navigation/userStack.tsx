@@ -1,9 +1,10 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-
+import MedicalRecords from "../screens/MedicalRecords";
 import Home2 from "../screens/Home2"
 import ScheduleScreen from "../screens/ScheduleScreen"
+import AddRecords from "../screens/AddRecords";
 import NotificationScreen from "../screens/NotificationScreen"
 import DateAndTimeScreen from "../screens/DateAndTimeScreen"
 import DateAndTimeSelectScreen from "../screens/DateAndTimeSelectScreen"
@@ -110,6 +111,34 @@ export default function UserStack() {
                 fontSize: 18,
               },
               headerRight: () => <CustomMenu />,
+            }}
+          />
+          <Stack.Screen
+            name="MedicalRecords"
+            component={MedicalRecords}
+            options={{
+              title: "Medical Records",
+              headerTitleAlign: "center",
+              headerTitleStyle: {
+                fontFamily: FONTS.regular,
+                fontWeight: "700",
+                color: "#404446",
+                fontSize: 18,
+              },
+            }}
+          />
+          <Stack.Screen
+            name="AddRecords"
+            component={AddRecords}
+            options={{
+              title: "Add Records",
+              headerTitleAlign: "center",
+              headerTitleStyle: {
+                fontFamily: FONTS.regular,
+                fontWeight: "700",
+                color: "#404446",
+                fontSize: 18,
+              },
             }}
           />
         </Stack.Navigator>
