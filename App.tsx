@@ -2,16 +2,14 @@ import Signup from "./screens/Signup";
 import * as Font from "expo-font";
 import { useEffect, useState } from "react";
 import React from "react";
-import SignIn from "./screens/Signin";
-import { CustomMenu } from "./components/CustomMenu";
-import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
-import { useFonts } from "expo-font";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import RootNavigation from './navigation';
+import RootNavigation from "./navigation";
 import { FONTS } from "./constants";
-import OnBoardingScreen from './screens/OnBoardingScreen';
+import OnBoardingScreen from "./screens/OnBoardingScreen";
 import { ProvideAuth } from "./lib/auth/AuthContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { createStackNavigator } from "@react-navigation/stack";
+import OnboardingScreen from "./screens/OnBoardingScreen";
 const theme = {
   ...DefaultTheme,
   colors: {
@@ -20,9 +18,10 @@ const theme = {
   },
 };
 
-
 export default function App() {
   const [first, setfirst] = useState(false);
+  const [isAppFirstLaunched, setIsAppFirstLaunched] = useState<Boolean>();
+  const Stack = createStackNavigator();
   const loadFonts = async () => {
     await Font.loadAsync({
       AvenirLTStd: require("./assets/fonts/AvenirLTStd.ttf"),
@@ -30,11 +29,43 @@ export default function App() {
   };
   useEffect(() => {
     loadFonts();
-  });
+    const isAppLaunched = async () => {
+      // AsyncStorage.removeItem("isAppFirstLaunched");
+      const appData = await AsyncStorage.getItem("isAppFirstLaunched");
+      if (appData == null) {
+        setIsAppFirstLaunched(true);
+        AsyncStorage.setItem("isAppFirstLaunched", "false");
+      } else {
+        setIsAppFirstLaunched(false);
+      }
+      console.log(appData, isAppFirstLaunched);
+    };
+    isAppLaunched();
+  }, [AsyncStorage.getItem("isAppFirstLaunched")]);
+
   if (!first) return null;
   return (
     <ProvideAuth>
-    <OnBoardingScreen/>
+      <NavigationContainer>
+        <Stack.Navigator >
+          {isAppFirstLaunched && (
+            <Stack.Screen
+              name="OnBoard"
+              component={OnboardingScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+          )}
+          <Stack.Screen
+            name="Root"
+            component={RootNavigation}
+            options={{
+              headerShown: false,
+            }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
     </ProvideAuth>
   );
 }

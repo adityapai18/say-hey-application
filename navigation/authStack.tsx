@@ -9,7 +9,6 @@ const Stack = createStackNavigator();
 
 export default function AuthStack() {
   return (
-    <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
           name="SignUp"
@@ -26,6 +25,5 @@ export default function AuthStack() {
           }}
         />
       </Stack.Navigator>
-    </NavigationContainer>
   );
 }

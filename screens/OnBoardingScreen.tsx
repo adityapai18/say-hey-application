@@ -52,7 +52,7 @@ const Slide = ({ item }: any) => {
   );
 };
 
-const OnboardingScreen = () => {
+const OnboardingScreen = ({navigation}:any) => {
   const [currentSlideIndex, setCurrentSlideIndex] = React.useState(0);
   const ref = React.useRef();
   const updateCurrentSlideIndex = (e: any) => {
@@ -129,7 +129,7 @@ const OnboardingScreen = () => {
               <TouchableOpacity
                 style={styles.btn}
                 onPress={() => {
-                  // navigation.replace('HomeScreen')
+                  navigation.navigate('Root');
                   console.log("homescreen");
                 }}
               >

@@ -18,7 +18,6 @@ const Stack = createStackNavigator();
 export default function UserStack() {
   return (
     <PaperProvider>
-      <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
             name="Home"
@@ -142,7 +141,6 @@ export default function UserStack() {
             }}
           />
         </Stack.Navigator>
-      </NavigationContainer>
     </PaperProvider>
   );
 }
