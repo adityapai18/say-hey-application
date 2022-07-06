@@ -10,6 +10,7 @@ import { useFonts } from "expo-font";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import RootNavigation from './navigation';
 import { FONTS } from "./constants";
+import OnBoardingScreen from './screens/OnBoardingScreen';
 import { ProvideAuth } from "./lib/auth/AuthContext";
 const theme = {
   ...DefaultTheme,
@@ -33,34 +34,7 @@ export default function App() {
   if (!first) return null;
   return (
     <ProvideAuth>
-    <RootNavigation/>
+    <OnBoardingScreen/>
     </ProvideAuth>
-      // <NavigationContainer>
-      //   <Stack.Navigator initialRouteName="Home">
-      //     <Stack.Screen
-      //       name="SignUp"
-      //       component={Signup}
-      //       options={{
-      //         headerShown: false,
-      //       }}
-      //     />
-      //     <Stack.Screen
-      //       name="SignIn"
-      //       component={SignIn}
-      //       options={{
-      //         headerShown: false,
-      //       }}
-      //     />
-      //     {/* <Stack.Screen
-      //         name="VerifyAccount"
-      //         component={VerifyAccount}
-      //         options={{
-      //           headerShown: false,
-      //         }}
-      //       /> */}
-
-          
-      //   </Stack.Navigator>
-      // </NavigationContainer>
   );
 }
