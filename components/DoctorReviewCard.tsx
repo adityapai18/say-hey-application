@@ -6,15 +6,24 @@ import {
   StyleSheet,
   TextInput,
   Image,
-  Pressable,
+  TouchableOpacity,
   ScrollView,
   ImageBackground,
+  GestureResponderEvent,
 } from "react-native";
 import { COLORS, FONTS, SHADOWS } from "../constants";
-
-export const DoctorReviewCard = (props: any) => {
+interface doctorCard{
+  DocName : String,
+  Specialist : String,
+  Qualification : String,
+  Rating: Number,
+  onPress: any,
+} 
+export const DoctorReviewCard = (props:doctorCard) => {
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container} 
+    onPress={props.onPress}
+    >
       <View style={{ height: 185, borderRadius: 12, alignSelf: "center" }}>
         <Image
           source={require("../assets/DoctorReview.png")}
@@ -35,7 +44,7 @@ export const DoctorReviewCard = (props: any) => {
                 { fontSize: 12, fontWeight: "800", marginRight: 5 },
               ]}
             >
-              4.5
+              {props.Rating}
             </Text>
             <Image source={require("../assets/ReviewStar.png")}></Image>
           </View>
@@ -47,7 +56,7 @@ export const DoctorReviewCard = (props: any) => {
           { fontSize: 18, fontWeight: "800", marginTop: 10 },
         ]}
       >
-        Dr. Amanda Brown
+        {props.DocName}
       </Text>
       <Text
         style={[
@@ -55,9 +64,9 @@ export const DoctorReviewCard = (props: any) => {
           { fontSize: 12, fontWeight: "300"},
         ]}
       >
-        Psychiatrist, MBBS
+        {props.Specialist}, {props.Qualification}
       </Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 const styles = StyleSheet.create({

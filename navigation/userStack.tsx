@@ -8,6 +8,7 @@ import AddRecords from "../screens/AddRecords";
 import NotificationScreen from "../screens/NotificationScreen"
 import DateAndTimeScreen from "../screens/DateAndTimeScreen"
 import DateAndTimeSelectScreen from "../screens/DateAndTimeSelectScreen"
+import DoctorDetails from "../screens/DoctorDetails";
 import MyProfile from "../screens/MyProfile"
 import { CustomMenu } from "../components/CustomMenu";
 import EditProfile from "../screens/EditProfile"
@@ -131,6 +132,21 @@ export default function UserStack() {
             component={AddRecords}
             options={{
               title: "Add Records",
+              headerTitleAlign: "center",
+              headerTitleStyle: {
+                fontFamily: FONTS.regular,
+                fontWeight: "700",
+                color: "#404446",
+                fontSize: 18,
+              },
+            }}
+          />
+          <Stack.Screen
+            name="DoctorDetails"
+            component={DoctorDetails}
+            options={{
+              title: "Add Records",
+              headerShown:false,
               headerTitleAlign: "center",
               headerTitleStyle: {
                 fontFamily: FONTS.regular,

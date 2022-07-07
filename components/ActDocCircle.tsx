@@ -4,7 +4,7 @@ import {
   SafeAreaView,
   View,
   StyleSheet,
-  TextInput,
+  TouchableOpacity,
   Image,
   Pressable,
   ScrollView,
@@ -13,7 +13,7 @@ import { COLORS, FONTS, SHADOWS } from "../constants";
 
 export const ActDocCircle = (props: any) => {
   return (
-    <View style={{ marginTop: 19, marginRight: 22 }}>
+    <TouchableOpacity style={{ marginTop: 19, marginRight: 22 }}>
       <Image source={require("../assets/actDoc1.png")}></Image>
       <Text
         style={[
@@ -28,7 +28,7 @@ export const ActDocCircle = (props: any) => {
       >
         Jenifer
       </Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 const styles = StyleSheet.create({

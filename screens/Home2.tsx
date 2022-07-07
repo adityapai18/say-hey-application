@@ -1,11 +1,11 @@
 import { Text } from "@rneui/themed";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   SafeAreaView,
   View,
   StyleSheet,
   Image,
-  Pressable,
+  TouchableOpacity,
   ScrollView,
 } from "react-native";
 import SearchBar from "../components/SearchBar";
@@ -14,9 +14,23 @@ import { COLORS, FONTS, SHADOWS } from "../constants";
 import { ScheduleCardHome } from "../components/ScheduleCardHome";
 import { ActDocCircle } from "../components/ActDocCircle";
 import { DoctorReviewCard } from "../components/DoctorReviewCard";
+import { viewAllDoc } from "../lib/api/Connection";
 const Home2 = ({ navigation }: any) => {
   const [searchPhrase, setSearchPhrase] = useState("");
   const [clicked, setClicked] = useState(false);
+  const [docData, setDocData] = useState([]);
+  useEffect(() => {
+    getDocData();
+  }, []);
+  async function getDocData() {
+    viewAllDoc().then((value) => {
+      setDocData(value.data);
+      console.log(docData);
+    });
+  }
+ const DocDetailScreen = () => {
+    navigation.navigate('DoctorDetails');
+ }
   return (
     <ScrollView>
       <SafeAreaView style={styles.container}>
@@ -111,7 +125,7 @@ const Home2 = ({ navigation }: any) => {
           >
             Upcoming schedule?
           </Text>
-          <Pressable>
+          <TouchableOpacity>
             <Text
               style={[
                 styles.text,
@@ -120,7 +134,7 @@ const Home2 = ({ navigation }: any) => {
             >
               See All
             </Text>
-          </Pressable>
+          </TouchableOpacity>
         </View>
         <ScheduleCardHome />
         <View
@@ -139,7 +153,7 @@ const Home2 = ({ navigation }: any) => {
           >
             Active Doctors
           </Text>
-          <Pressable>
+          <TouchableOpacity>
             <Text
               style={[
                 styles.text,
@@ -148,7 +162,7 @@ const Home2 = ({ navigation }: any) => {
             >
               See All
             </Text>
-          </Pressable>
+          </TouchableOpacity>
         </View>
         <ScrollView horizontal={true} style={{ flexDirection: "row" }}>
           <ActDocCircle />
@@ -175,7 +189,7 @@ const Home2 = ({ navigation }: any) => {
           >
             Top rated Doctors
           </Text>
-          <Pressable>
+          <TouchableOpacity>
             <Text
               style={[
                 styles.text,
@@ -184,17 +198,30 @@ const Home2 = ({ navigation }: any) => {
             >
               See All
             </Text>
-          </Pressable>
+          </TouchableOpacity>
         </View>
-        <ScrollView horizontal={true} style={{ marginBottom: 50 }}>
-          <DoctorReviewCard />
-          <DoctorReviewCard />
-          <DoctorReviewCard />
-          <DoctorReviewCard />
+        <ScrollView
+          horizontal={true}
+          style={{ marginBottom: 50, flex: 1 }}
+          showsHorizontalScrollIndicator={false}
+        >
+          {docData.map((item: any, index) => {
+            console.log(item);
+            return (
+              <DoctorReviewCard
+                key={index}
+                Qualification={item.qualification}
+                Specialist={item.specialist}
+                DocName={item.doc_name}
+                Rating={item.rating}
+                onPress={DocDetailScreen}
+              />
+            );
+          })}
         </ScrollView>
       </SafeAreaView>
       <View style={styles.bottomNav}>
-        <Pressable style={{ justifyContent: "center", alignItems: "center" }}>
+        <TouchableOpacity style={{ justifyContent: "center", alignItems: "center" }}>
           <Image source={require("../assets/Home.png")}></Image>
           <Text
             style={[
@@ -204,8 +231,8 @@ const Home2 = ({ navigation }: any) => {
           >
             Home
           </Text>
-        </Pressable>
-        <Pressable
+        </TouchableOpacity>
+        <TouchableOpacity
           style={{ justifyContent: "center", alignItems: "center" }}
           onPress={() => {
             navigation.navigate("ScheduleScreen");
@@ -225,8 +252,8 @@ const Home2 = ({ navigation }: any) => {
           >
             Schedule
           </Text>
-        </Pressable>
-        <Pressable style={{ justifyContent: "center", alignItems: "center" }}>
+        </TouchableOpacity>
+        <TouchableOpacity style={{ justifyContent: "center", alignItems: "center" }}>
           <Image source={require("../assets/Discover.png")}></Image>
           <Text
             style={[
@@ -236,8 +263,8 @@ const Home2 = ({ navigation }: any) => {
           >
             Discover
           </Text>
-        </Pressable>
-        <Pressable
+        </TouchableOpacity>
+        <TouchableOpacity
           style={{ justifyContent: "center", alignItems: "center" }}
           onPress={() => {
             navigation.navigate("Profile");
@@ -252,7 +279,7 @@ const Home2 = ({ navigation }: any) => {
           >
             Account
           </Text>
-        </Pressable>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
