@@ -5,7 +5,6 @@ import React from "react";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import RootNavigation from "./navigation";
 import { FONTS } from "./constants";
-import OnBoardingScreen from "./screens/OnBoardingScreen";
 import { ProvideAuth } from "./lib/auth/AuthContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -41,7 +40,7 @@ export default function App() {
       console.log(appData, isAppFirstLaunched);
     };
     isAppLaunched();
-  }, [AsyncStorage.getItem("isAppFirstLaunched")]);
+  }, []);
 
   if (!first) return null;
   return (
