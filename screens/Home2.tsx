@@ -28,9 +28,9 @@ const Home2 = ({ navigation }: any) => {
       console.log(docData);
     });
   }
- const DocDetailScreen = () => {
-    navigation.navigate('DoctorDetails');
- }
+  const DocDetailScreen = () => {
+    navigation.navigate("DoctorDetails");
+  };
   return (
     <ScrollView>
       <SafeAreaView style={styles.container}>
@@ -60,12 +60,17 @@ const Home2 = ({ navigation }: any) => {
               SayHey
             </Text>
           </View>
-          <View style={{ backgroundColor: "white", borderRadius: 12 }}>
+          <TouchableOpacity
+            style={{ backgroundColor: "white", borderRadius: 12 }}
+            onPress={() => {
+              navigation.navigate("NotificationScreen");
+            }}
+          >
             <Image
               source={require("../assets/Notification.png")}
               style={{ margin: 16 }}
             ></Image>
-          </View>
+          </TouchableOpacity>
         </View>
         <View
           style={{ flexDirection: "row", marginTop: 20, alignItems: "center" }}
@@ -77,12 +82,14 @@ const Home2 = ({ navigation }: any) => {
             clicked={clicked}
             setClicked={setClicked}
           />
-          <View style={{ backgroundColor: "#0A94FF", borderRadius: 12 }}>
+          <TouchableOpacity
+            style={{ backgroundColor: "#0A94FF", borderRadius: 12 }}
+          >
             <Image
               source={require("../assets/SettingsIcon.png")}
               style={{ margin: 16 }}
             ></Image>
-          </View>
+          </TouchableOpacity>
         </View>
         <View
           style={{
@@ -103,10 +110,18 @@ const Home2 = ({ navigation }: any) => {
           How are you feeling today?
         </Text>
         <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
-          <Image source={require("../assets/mood1.png")}></Image>
-          <Image source={require("../assets/mood2.png")}></Image>
-          <Image source={require("../assets/mood3.png")}></Image>
-          <Image source={require("../assets/mood4.png")}></Image>
+          <TouchableOpacity>
+            <Image source={require("../assets/mood1.png")}></Image>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Image source={require("../assets/mood2.png")}></Image>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Image source={require("../assets/mood3.png")}></Image>
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Image source={require("../assets/mood4.png")}></Image>
+          </TouchableOpacity>
         </View>
 
         <View
@@ -218,10 +233,20 @@ const Home2 = ({ navigation }: any) => {
               />
             );
           })}
+          <DoctorReviewCard
+            key={"index"}
+            Qualification={"MBBS"}
+            Specialist={"Neurology"}
+            DocName={"Dr Adam Will"}
+            Rating={4.5}
+            onPress={DocDetailScreen}
+          />
         </ScrollView>
       </SafeAreaView>
       <View style={styles.bottomNav}>
-        <TouchableOpacity style={{ justifyContent: "center", alignItems: "center" }}>
+        <TouchableOpacity
+          style={{ justifyContent: "center", alignItems: "center" }}
+        >
           <Image source={require("../assets/Home.png")}></Image>
           <Text
             style={[
@@ -253,7 +278,9 @@ const Home2 = ({ navigation }: any) => {
             Schedule
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{ justifyContent: "center", alignItems: "center" }}>
+        <TouchableOpacity
+          style={{ justifyContent: "center", alignItems: "center" }}
+        >
           <Image source={require("../assets/Discover.png")}></Image>
           <Text
             style={[

@@ -14,6 +14,17 @@ import { FONTS } from "../constants";
 const DoctorDetails = ({ navigation }: any) => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#dbe0e4" }}>
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => {
+          navigation.goBack();
+        }}
+      >
+        <Image
+          source={require("../assets/RightArrow.png")}
+          style={{ transform: [{ rotate: "180deg" }] }}
+        ></Image>
+      </TouchableOpacity>
       <View style={{ height: "50%" }}>
         <ImageBackground
           source={require("../assets/DoctorDetailsImg.png")}
@@ -133,6 +144,17 @@ const styles = StyleSheet.create({
     marginTop: 25,
     justifyContent: "center",
     alignItems: "center",
+    borderRadius: 12,
+  },
+  backButton: {
+    padding: 16,
+    zIndex: 1,
+    backgroundColor: "#FFFFFF",
+    position: "absolute",
+    top: 0,
+    left: 0,
+    marginTop: 25,
+    marginLeft: 20,
     borderRadius: 12,
   },
 });

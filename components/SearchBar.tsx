@@ -28,9 +28,14 @@ const SearchBar = ({
           style={styles.input}
           placeholder={PlaceHolder}
           value={searchPhrase}
-          onChangeText={setSearchPhrase}
-          onFocus={() => {
-            setClicked(true);
+          onChangeText={(text)=>{
+            if(text.length>0){
+              setClicked(true)
+            }
+            else{
+              setClicked(false)
+            }
+            setSearchPhrase(text);
           }}
         />
         {/* cross Icon, depending on whether the search bar is clicked or not */}

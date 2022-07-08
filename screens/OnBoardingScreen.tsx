@@ -65,7 +65,7 @@ const OnboardingScreen = ({navigation}:any) => {
     const Timer = () => {
       interval = setTimeout(() => {
         goToNextSlide();
-      }, 5000);
+      }, 3000);
       console.log(currentSlideIndex);
     };
     Timer();

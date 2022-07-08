@@ -97,8 +97,8 @@ const NotificationScreen = ({ navigation }: any) => {
           Patient's Information
         </Text>
       </View>
-      <ScrollView>
-        <View style={{ paddingHorizontal: 15,marginBottom:5 }}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={{ paddingHorizontal: 15,marginBottom:15 }}>
           <DocNotifications />
           <DocNotifications />
           <DocNotifications />
