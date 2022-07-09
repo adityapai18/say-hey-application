@@ -27,9 +27,9 @@ const Home2 = ({ navigation }: any) => {
       setDocData(value.data);
     });
   }
-  const DocDetailScreen = (item:any) => {
-    console.log(item)
-    navigation.navigate("DoctorDetails",{...item});
+  const DocDetailScreen = (item: any) => {
+    console.log(item);
+    navigation.navigate("DoctorDetails", { ...item });
   };
   return (
     <ScrollView>
@@ -179,7 +179,11 @@ const Home2 = ({ navigation }: any) => {
             </Text>
           </TouchableOpacity>
         </View>
-        <ScrollView horizontal={true} style={{ flexDirection: "row" }}>
+        <ScrollView
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          style={{ flexDirection: "row" }}
+        >
           <ActDocCircle />
           <ActDocCircle />
           <ActDocCircle />
@@ -228,7 +232,7 @@ const Home2 = ({ navigation }: any) => {
                 Specialist={item.specialist}
                 DocName={item.doc_name}
                 Rating={item.rating}
-                onPress={()=>{
+                onPress={() => {
                   DocDetailScreen(item);
                 }}
               />

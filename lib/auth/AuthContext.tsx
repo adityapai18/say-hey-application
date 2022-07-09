@@ -109,7 +109,7 @@ function useProvideAuth() {
       }
     });
     // Cleanup subscription on unmount
-    return () => unsubscribe();
+    return unsubscribe;
   }, []);
   // Return the user object and auth methods
   return {
