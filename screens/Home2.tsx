@@ -25,11 +25,11 @@ const Home2 = ({ navigation }: any) => {
   async function getDocData() {
     viewAllDoc().then((value) => {
       setDocData(value.data);
-      console.log(docData);
     });
   }
-  const DocDetailScreen = () => {
-    navigation.navigate("DoctorDetails");
+  const DocDetailScreen = (item:any) => {
+    console.log(item)
+    navigation.navigate("DoctorDetails",{...item});
   };
   return (
     <ScrollView>
@@ -221,7 +221,6 @@ const Home2 = ({ navigation }: any) => {
           showsHorizontalScrollIndicator={false}
         >
           {docData.map((item: any, index) => {
-            console.log(item);
             return (
               <DoctorReviewCard
                 key={index}
@@ -229,18 +228,12 @@ const Home2 = ({ navigation }: any) => {
                 Specialist={item.specialist}
                 DocName={item.doc_name}
                 Rating={item.rating}
-                onPress={DocDetailScreen}
+                onPress={()=>{
+                  DocDetailScreen(item);
+                }}
               />
             );
           })}
-          <DoctorReviewCard
-            key={"index"}
-            Qualification={"MBBS"}
-            Specialist={"Neurology"}
-            DocName={"Dr Adam Will"}
-            Rating={4.5}
-            onPress={DocDetailScreen}
-          />
         </ScrollView>
       </SafeAreaView>
       <View style={styles.bottomNav}>

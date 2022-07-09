@@ -10,18 +10,14 @@ import {
   Image,
 } from "react-native";
 import { COLORS, FONTS, SHADOWS } from "../constants";
-// import PhoneInput from "react-native-phone-number-input";
+import { useAuth } from "../lib/auth/AuthContext";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebase";
 const SignIn = ({ navigation }: any) => {
+  const user = useAuth();
   const signInAuth=(value:any)=>
   {
-    signInWithEmailAndPassword(auth,value.email,value.password)
-    .then((authUser) => {
-      console.log(authUser);
-      alert("Login Successful")
-    })
-    .catch((error) => alert(error.message))
+    user?.signin(value.email,value.password)
   }
   return (
     <SafeAreaView style={styles.container}>

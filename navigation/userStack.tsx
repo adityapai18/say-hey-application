@@ -10,6 +10,7 @@ import DateAndTimeScreen from "../screens/DateAndTimeScreen"
 import DateAndTimeSelectScreen from "../screens/DateAndTimeSelectScreen"
 import DoctorDetails from "../screens/DoctorDetails";
 import MyProfile from "../screens/MyProfile"
+import CalendlyBookingPage from "../screens/CalendlyBookingPage";
 import { CustomMenu } from "../components/CustomMenu";
 import EditProfile from "../screens/EditProfile"
 import { FONTS } from "../constants";
@@ -146,6 +147,21 @@ export default function UserStack() {
             component={DoctorDetails}
             options={{
               title: "Add Records",
+              headerShown:false,
+              headerTitleAlign: "center",
+              headerTitleStyle: {
+                fontFamily: FONTS.regular,
+                fontWeight: "700",
+                color: "#404446",
+                fontSize: 18,
+              },
+            }}
+          />
+          <Stack.Screen
+            name="CalendlyBookingPage"
+            component={CalendlyBookingPage}
+            options={{
+              title: "Booking Page",
               headerShown:false,
               headerTitleAlign: "center",
               headerTitleStyle: {

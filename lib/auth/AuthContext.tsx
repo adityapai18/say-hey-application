@@ -37,7 +37,9 @@ function useProvideAuth() {
     signInWithEmailAndPassword(auth, email, password).then((response: any) => {
       setUser(response.user);
       return response.user;
-    });
+    }).catch((err)=>{
+      alert(err);
+    })
   };
   const signup = (
     email: string,

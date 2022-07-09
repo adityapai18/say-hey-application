@@ -29,7 +29,7 @@ export default function App() {
   useEffect(() => {
     loadFonts();
     const isAppLaunched = async () => {
-      AsyncStorage.removeItem("isAppFirstLaunched");
+      // AsyncStorage.removeItem("isAppFirstLaunched");
       const appData = await AsyncStorage.getItem("isAppFirstLaunched");
       if (appData == null) {
         setIsAppFirstLaunched(true);

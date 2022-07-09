@@ -7,11 +7,16 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FONTS } from "../constants";
 
-const DoctorDetails = ({ navigation }: any) => {
+const DoctorDetails = ({ navigation, route }: any) => {
+  const [docData, setdocData] = useState();
+  useEffect(() => {
+    setdocData(route.params);
+    console.log(route.params);
+  }, []);
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#dbe0e4" }}>
       <TouchableOpacity
@@ -43,7 +48,7 @@ const DoctorDetails = ({ navigation }: any) => {
           }}
         >
           <Text style={[styles.text, { fontWeight: "400", fontSize: 28 }]}>
-            Dr. Usman Yusuf
+            {docData && docData.doc_name}
           </Text>
           <Text
             style={[
@@ -56,7 +61,7 @@ const DoctorDetails = ({ navigation }: any) => {
               },
             ]}
           >
-            M.B.B.S, Psychiatrist, MD
+            {docData && docData.qualification}, {docData && docData.specialist}
           </Text>
           <View
             style={{
@@ -77,7 +82,7 @@ const DoctorDetails = ({ navigation }: any) => {
                 <Image source={require("../assets/MedalIcon.png")}></Image>
               </View>
               <Text style={[styles.text, { color: "#6C7072", fontSize: 16 }]}>
-                8 years
+                {docData && docData.experience}
               </Text>
             </View>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -92,7 +97,7 @@ const DoctorDetails = ({ navigation }: any) => {
                 <Image source={require("../assets/RatingsIcon.png")}></Image>
               </View>
               <Text style={[styles.text, { color: "#6C7072", fontSize: 16 }]}>
-                4.8
+                {docData && docData.rating}
               </Text>
             </View>
           </View>
@@ -105,14 +110,16 @@ const DoctorDetails = ({ navigation }: any) => {
               { color: "#6C7072", fontSize: 14, lineHeight: 20 },
             ]}
           >
-            Dr. Usman Yusuf is an M.B.B.S, Psychiatrist, MD with special
-            interest Mental Health problems. He was awarded with the recent
-            publications about GERD problems from CDC
+            {docData && docData.decription
+              ? docData.decription
+              : "Dr. Usman Yusuf is an M.B.B.S, Psychiatrist, MD with special" +
+                "interest Mental Health problems. He was awarded with the recent" +
+                "publications about GERD problems from CDC"}
           </Text>
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
-              navigation.navigate("DateAndTimeScreen");
+              navigation.navigate("CalendlyBookingPage");
             }}
           >
             <Text
