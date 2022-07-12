@@ -6,15 +6,14 @@ const CalendlyBookingPage = () => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "fff" }}>
       <WebView
-      style={{flex:1}}
+        style={{ flex: 1 }}
         source={{
           html: `
-          <div class="calendly-inline-widget" data-url="https://calendly.com/sayheyofficial/60min?hide_gdpr_banner=1" style="width:100%;height:auto;"></div>
-          <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+          <iframe src="https://meetings.hubspot.com/say_hey" frameborder="0" style='height:100%;width:100%;'></iframe>
           `,
         }}
       />
-    </SafeAreaView>
+      </SafeAreaView>
   );
 };
 
