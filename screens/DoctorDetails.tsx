@@ -6,17 +6,21 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
+  Modal,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FONTS } from "../constants";
-
+import WebView from "react-native-webview";
 const DoctorDetails = ({ navigation, route }: any) => {
   const [docData, setdocData] = useState();
+  const [visible, setvisible] = useState(false);
   useEffect(() => {
     setdocData(route.params);
     console.log(route.params);
   }, []);
+  const showModal = () => setvisible(true);
+  const hideModal = () => setvisible(false);
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#dbe0e4" }}>
       <TouchableOpacity
@@ -116,12 +120,7 @@ const DoctorDetails = ({ navigation, route }: any) => {
                 "interest Mental Health problems. He was awarded with the recent" +
                 "publications about GERD problems from CDC"}
           </Text>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              navigation.navigate("CalendlyBookingPage");
-            }}
-          >
+          <TouchableOpacity style={styles.button} onPress={showModal}>
             <Text
               style={[
                 styles.text,
@@ -131,6 +130,34 @@ const DoctorDetails = ({ navigation, route }: any) => {
               Check Schedule
             </Text>
           </TouchableOpacity>
+          <Modal visible={visible} onDismiss={hideModal}>
+            <View style={{ flex: 1 }}>
+              <WebView
+                source={{ uri: "https://meetings.hubspot.com/say_hey" }}
+                originWhitelist={["*"]}
+                scrollEnabled={false}
+                startInLoadingState={true}
+              />
+            </View>
+            <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={hideModal}
+                style={styles.btn}
+              >
+                <Text
+                  style={[
+                    {
+                      fontWeight: "bold",
+                      fontSize: 15,
+                      color: "white",
+                    },
+                    styles.text,
+                  ]}
+                >
+                  CLOSE
+                </Text>
+              </TouchableOpacity>
+          </Modal>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -163,5 +190,13 @@ const styles = StyleSheet.create({
     marginTop: 25,
     marginLeft: 20,
     borderRadius: 12,
+  },
+  btn: {
+    borderRadius: 5,
+    backgroundColor: "#0A94FF",
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf:"center",
+    padding:'3%'
   },
 });
