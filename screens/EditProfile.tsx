@@ -6,16 +6,21 @@ import {
   StyleSheet,
   TextInput,
   Image,
-  Pressable,
+  TouchableOpacity,
   ScrollView,
   ImageBackground,
   Switch,
 } from "react-native";
+import { storage } from "../firebase";
 import * as ImagePicker from "expo-image-picker";
 import { COLORS, FONTS, SHADOWS, SIZES } from "../constants";
+import { app } from "../firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { useAuth } from "../lib/auth/AuthContext";
 
 const EditProfile = ({ navigation }: any) => {
-  const [image, setImage] = useState('');
+  const auth = useAuth();
+  const [image, setImage] = useState(auth?.user.photoURL);
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
   const pickImage = async () => {
@@ -25,12 +30,21 @@ const EditProfile = ({ navigation }: any) => {
       aspect: [4, 4],
       quality: 1,
     });
-
-    console.log(result);
-
     if (!result.cancelled) {
       setImage(result.uri);
+      uploadImage(result.uri);
     }
+  };
+  const uploadImage = async (uri: string) => {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    const filename = uri.substring(uri.lastIndexOf("/") + 1);
+    const address = ref(storage, filename);
+    await uploadBytes(address, blob).then((snapshot) => {
+      getDownloadURL(snapshot.ref).then((url) => {
+        auth?.updateProfilePic(url);
+      });
+    });
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -42,8 +56,8 @@ const EditProfile = ({ navigation }: any) => {
             alignItems: "center",
           }}
         >
-          <Pressable style={styles.profilePic} onPress={pickImage}>
-            {image == "" ? (
+          <TouchableOpacity style={styles.profilePic} onPress={pickImage}>
+            {auth?.user.photoURL == "" ? (
               <Image
                 source={require("../assets/PatientImage.png")}
                 style={{
@@ -65,7 +79,7 @@ const EditProfile = ({ navigation }: any) => {
               />
             )}
             <Image source={require("../assets/Camera.png")}></Image>
-          </Pressable>
+          </TouchableOpacity>
           <Text
             style={[
               styles.text,
@@ -78,7 +92,7 @@ const EditProfile = ({ navigation }: any) => {
               },
             ]}
           >
-            Shanaws Mahamud
+            {auth?.user.displayName}
           </Text>
           <Text
             style={[
@@ -118,7 +132,7 @@ const EditProfile = ({ navigation }: any) => {
                 { fontWeight: "400", fontSize: 14, color: "#6F8BA4" },
               ]}
             >
-              Shanaws Mahamud
+              {auth?.user.displayName}
             </Text>
           </View>
           <View
@@ -143,7 +157,7 @@ const EditProfile = ({ navigation }: any) => {
                 { fontWeight: "400", fontSize: 14, color: "#6F8BA4" },
               ]}
             >
-              hi@shanaws.xyz
+              {auth?.user.email}
             </Text>
           </View>
           <View
@@ -191,7 +205,11 @@ const EditProfile = ({ navigation }: any) => {
             />
           </View>
         </View>
-        <Pressable style={styles.button}>
+        <TouchableOpacity style={styles.button}
+        onPress={()=>{
+          navigation.popToTop();
+        }}
+        >
           <Text
             style={[
               styles.text,
@@ -200,7 +218,7 @@ const EditProfile = ({ navigation }: any) => {
           >
             Done
           </Text>
-        </Pressable>
+        </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );

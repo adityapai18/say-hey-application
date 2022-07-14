@@ -1,5 +1,5 @@
 import { Text } from "@rneui/themed";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   SafeAreaView,
   View,
@@ -12,16 +12,23 @@ import {
 import { Button } from "@rneui/base";
 import { AppointmentCard } from "../components/AppointmentCard";
 import { COLORS, FONTS, SHADOWS } from "../constants";
-
-const MyProfile = ({navigation}:any) => {
+import { useAuth } from "../lib/auth/AuthContext";
+import { TouchableOpacity } from "react-native-gesture-handler";
+const MyProfile = ({ navigation }: any) => {
+  const auth = useAuth();
   return (
     <ScrollView>
       <SafeAreaView style={styles.container}>
         <View style={{ marginTop: 15, flexDirection: "row" }}>
           <View style={styles.profilePic}>
             <Image
-              source={require("../assets/PatientImage.png")}
-              style={{ borderRadius: 10 }}
+              source={{ uri: auth?.user.photoURL }}
+              style={{
+                width: 85,
+                height: 85,
+                borderRadius: 10,
+                position: "absolute",
+              }}
             ></Image>
           </View>
           <View style={{ marginLeft: "6%", marginTop: 5 }}>
@@ -31,7 +38,7 @@ const MyProfile = ({navigation}:any) => {
                 { fontSize: 19, fontWeight: "800", color: "#3B566E" },
               ]}
             >
-              Shanaws Mahmood
+              {auth?.user.displayName}
             </Text>
             <Text
               style={[
@@ -44,18 +51,11 @@ const MyProfile = ({navigation}:any) => {
                 },
               ]}
             >
-              +91 123 456 78
+              {auth?.user.email}
             </Text>
           </View>
         </View>
-        <View
-          style={{
-            justifyContent: "center",
-            alignItems: "center",
-            marginTop: 32,
-          }}
-        >
-          <Pressable
+          <TouchableOpacity
             style={styles.button}
             onPress={() => {
               navigation.navigate("EditProfile");
@@ -73,8 +73,7 @@ const MyProfile = ({navigation}:any) => {
             >
               Edit Profile
             </Text>
-          </Pressable>
-        </View>
+          </TouchableOpacity>
         <View
           style={{
             flexDirection: "row",
@@ -181,6 +180,8 @@ const styles = StyleSheet.create({
     width: "75%",
     justifyContent: "center",
     alignItems: "center",
+    alignSelf:"center",
+    marginVertical:'8%'
   },
 });
 

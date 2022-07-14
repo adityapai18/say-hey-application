@@ -7,20 +7,39 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  RefreshControl,
 } from "react-native";
 import SearchBar from "../components/SearchBar";
 import CarouselCard from "../components/CarouselCards";
 import { COLORS, FONTS, SHADOWS } from "../constants";
 import { ScheduleCardHome } from "../components/ScheduleCardHome";
-import { ActDocCircle } from "../components/ActDocCircle";
 import { DoctorReviewCard } from "../components/DoctorReviewCard";
+import { meetData } from "../lib/api/Connection";
 import { viewAllDoc } from "../lib/api/Connection";
+import { useAuth } from "../lib/auth/AuthContext";
 const Home2 = ({ navigation }: any) => {
+  const auth =useAuth();
   const [searchPhrase, setSearchPhrase] = useState("");
+  const [upComingSchedule, setUpComingSchedule] = useState();
   const [clicked, setClicked] = useState(false);
   const [docData, setDocData] = useState([]);
+  const [refreshing, setRefreshing] = React.useState(false);
   useEffect(() => {
     getDocData();
+    meetData(auth?.user.email).then((value)=>{
+      console.log('start\n\n')
+      var minDate=Infinity;
+      value.data.appointments.map((item:any)=>{
+        const dateCom=new Date(item.engagement.timestamp)
+        const today = new Date()
+        if(dateCom.getTime()>today.getTime()){
+           minDate= Math.min(minDate,dateCom.getTime());
+        }
+      })
+      const result = value.data.appointments.filter(item=>item.engagement.timestamp===minDate);
+      setUpComingSchedule(result[0]);
+      console.log(upComingSchedule)
+    })
   }, []);
   async function getDocData() {
     viewAllDoc().then((value) => {
@@ -28,11 +47,34 @@ const Home2 = ({ navigation }: any) => {
     });
   }
   const DocDetailScreen = (item: any) => {
-    console.log(item);
+    // console.log(item);
     navigation.navigate("DoctorDetails", { ...item });
   };
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    meetData(auth?.user.email).then((value)=>{
+      console.log('start\n\n')
+      var minDate=Infinity;
+      value.data.appointments.map((item:any)=>{
+        const dateCom=new Date(item.engagement.timestamp)
+        const today = new Date()
+        if(dateCom.getTime()>today.getTime()){
+           minDate= Math.min(minDate,dateCom.getTime());
+        }
+      })
+      const result = value.data.appointments.filter(item=>item.engagement.timestamp===minDate);
+      setUpComingSchedule(result[0]);
+      console.log(upComingSchedule)
+    }).then((value)=>{
+      setRefreshing(false)
+    })
+  }, [refreshing]);
   return (
-    <ScrollView>
+    <ScrollView
+    refreshControl={
+      <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+    }
+    >
       <SafeAreaView style={styles.container}>
         <View
           style={{
@@ -151,8 +193,14 @@ const Home2 = ({ navigation }: any) => {
             </Text>
           </TouchableOpacity>
         </View>
-        <ScheduleCardHome />
-        <View
+        <ScheduleCardHome
+        Key={upComingSchedule ? upComingSchedule.id : Math.random()}
+        dateTime={upComingSchedule ? upComingSchedule.engagement.timestamp:''}
+        DocName={upComingSchedule ? upComingSchedule.docdata1.doc_name :''}
+        Qualification={upComingSchedule ? upComingSchedule.docdata1.qualification :''}
+        profile={upComingSchedule ? upComingSchedule.docdata1.prof_pic :''}
+        />
+        {/* <View
           style={{
             flexDirection: "row",
             justifyContent: "space-between",
@@ -191,7 +239,7 @@ const Home2 = ({ navigation }: any) => {
           <ActDocCircle />
           <ActDocCircle />
           <ActDocCircle />
-        </ScrollView>
+        </ScrollView> */}
         <View
           style={{
             flexDirection: "row",
@@ -228,8 +276,8 @@ const Home2 = ({ navigation }: any) => {
             return (
               <DoctorReviewCard
                 key={index}
+                profile={item.prof_pic}
                 Qualification={item.qualification}
-                Specialist={item.specialist}
                 DocName={item.doc_name}
                 Rating={item.rating}
                 onPress={() => {

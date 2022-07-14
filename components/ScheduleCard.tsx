@@ -11,12 +11,33 @@ import {
 } from "react-native";
 import { Divider } from "@rneui/themed";
 import { COLORS, FONTS, SHADOWS } from "../constants";
+import { TouchableOpacity } from "react-native-gesture-handler";
+interface Schedule{
+  DocName : String,
+  Qualification : String,
+  profile:String,
+  dateTime:Number,
+  end:Number,
+  key:number
+}
+export const ScheduleCard = (props: Schedule) => {
+  console.log(props)
+  const date = new Date(props.dateTime);
+  const endTime = new Date(props.end);
+  const [meetDet, setdate] = useState({
+    scheduleDate:date.toLocaleDateString(),
+    start:date.toLocaleTimeString(),
+    end:endTime.toLocaleTimeString()
+  })
 
-export const ScheduleCard = (props: any) => {
+  console.log(date.toLocaleDateString(),date.toLocaleTimeString())
   return (
-    <View style={styles.ScheduleCard}>
+    <View style={styles.ScheduleCard} key={props.key}>
       <View style={{ flexDirection: "row" }}>
-        <Image source={require("../assets/DoctorScheduleCard.png")}></Image>
+        <Image source={{uri:props.profile}}
+        style={{height:40,width:40,borderRadius:40}}
+        resizeMode='contain'
+        ></Image>
         <View style={{ marginLeft: 15, flex: 1 }}>
           <View
             style={{
@@ -26,10 +47,10 @@ export const ScheduleCard = (props: any) => {
             }}
           >
             <Text style={[styles.text, { fontWeight: "700", fontSize: 14 }]}>
-              Dr. Jessica Lim
+              {props.DocName}
             </Text>
             <Text style={[styles.text, { fontWeight: "300", fontSize: 12 }]}>
-              Fri, Dec 18
+              {meetDet.scheduleDate}
             </Text>
           </View>
           <Text
@@ -43,7 +64,7 @@ export const ScheduleCard = (props: any) => {
               },
             ]}
           >
-            Psychologist
+            {props.Qualification}
           </Text>
         </View>
       </View>
@@ -59,21 +80,19 @@ export const ScheduleCard = (props: any) => {
         >
           <Image source={require("../assets/TimeVectorIcon.png")}></Image>
           <Text style={[styles.text, { fontWeight: "300", fontSize: 13 }]}>
-            04:00 PM - 05:00 PM
+            {meetDet.start} - {meetDet.end}
           </Text>
         </View>
         <View
           style={{
             flexDirection: "row",
             flex: 1,
-            justifyContent: "space-evenly",
+            justifyContent:'center',
             alignItems: "center",
           }}
         >
           <Image source={require("../assets/LocationVectorIcon.png")}></Image>
-          <Text style={[styles.text, { fontWeight: "300", fontSize: 13 }]}>
-            Siloam Hospital
-          </Text>
+          <Text style={[styles.text, { fontWeight: "300", fontSize: 13,marginLeft:10 }]}>Online</Text>
         </View>
       </View>
       <View
@@ -85,7 +104,7 @@ export const ScheduleCard = (props: any) => {
           alignItems: "center",
         }}
       >
-        <Pressable style={styles.button}>
+        <TouchableOpacity style={styles.button}>
           <Text
             style={[
               styles.text,
@@ -94,8 +113,8 @@ export const ScheduleCard = (props: any) => {
           >
             Cancel
           </Text>
-        </Pressable>
-        <Pressable style={[styles.button, { backgroundColor: "#0A94FF" }]}>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.button, { backgroundColor: "#0A94FF" }]}>
           <Text
             style={[
               styles.text,
@@ -104,14 +123,14 @@ export const ScheduleCard = (props: any) => {
           >
             Reschedule
           </Text>
-        </Pressable>
+        </TouchableOpacity>
       </View>
     </View>
   );
 };
 const styles = StyleSheet.create({
   ScheduleCard: {
-    height: 220,
+    flex:1,
     backgroundColor: "white",
     borderRadius: 8,
     marginTop: 16,

@@ -14,8 +14,8 @@ import {
 import { COLORS, FONTS, SHADOWS } from "../constants";
 interface doctorCard{
   DocName : String,
-  Specialist : String,
   Qualification : String,
+  profile:string,
   Rating: Number,
   onPress: any,
 } 
@@ -26,7 +26,8 @@ export const DoctorReviewCard = (props:doctorCard) => {
     >
       <View style={{ height: 185, borderRadius: 12, alignSelf: "center" }}>
         <Image
-          source={require("../assets/DoctorReview.png")}
+          style={{height:190,width:193}}
+          source={{uri:props.profile}}
           resizeMode="contain"
         ></Image>
         <View style={styles.starView}>
@@ -64,7 +65,7 @@ export const DoctorReviewCard = (props:doctorCard) => {
           { fontSize: 12, fontWeight: "300"},
         ]}
       >
-        {props.Specialist}, {props.Qualification}
+        {props.Qualification}
       </Text>
     </TouchableOpacity>
   );
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 19,
     marginRight: 20,
-    height: 257,
+    flex:1,
     width: 209,
     borderRadius: 16,
     backgroundColor: "#FFFFFF",

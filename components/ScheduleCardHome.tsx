@@ -10,17 +10,25 @@ import {
   ScrollView,
 } from "react-native";
 import { COLORS, FONTS, SHADOWS } from "../constants";
-
-export const ScheduleCardHome = (props: any) => {
+interface UpcomingSchedule {
+  DocName: String;
+  Qualification: String;
+  profile: String;
+  dateTime: number;
+  Key:number
+}
+export const ScheduleCardHome = (props: UpcomingSchedule) => {
+  console.log(props);
+  const [date, setdate] = useState(props.dateTime);
   return (
-    <View style={styles.ScheduleCard}>
+    <View style={styles.ScheduleCard} key={props.Key}>
       <Text
         style={[
           styles.text,
           { fontSize: 28, fontWeight: "400", color: "white" },
         ]}
       >
-        Mental Depression
+        Mental Checkup
       </Text>
       <Text
         style={[
@@ -28,7 +36,13 @@ export const ScheduleCardHome = (props: any) => {
           { fontSize: 14, fontWeight: "400", color: "white", marginTop: 4 },
         ]}
       >
-        Today 10.00 AM
+        {props.dateTime ? new Date(props.dateTime).toLocaleDateString() : ""}
+        {"     "}
+        {props.dateTime
+          ? new Date(props.dateTime).getHours() > 12
+            ? new Date(props.dateTime).getHours() + " PM"
+            : new Date(props.dateTime).getHours() + " AM"
+          : ""}
       </Text>
       <View style={styles.checkupButton}>
         <Text
@@ -53,7 +67,15 @@ export const ScheduleCardHome = (props: any) => {
           alignItems: "center",
         }}
       >
-        <Image source={require("../assets/ScheduleCardDoctor.png")}></Image>
+        <Image
+          source={
+            props.profile
+              ? { uri: props.profile }
+              : require("../assets/ScheduleCardDoctor.png")
+          }
+          style={{ height: 48, width: 48, borderRadius: 48 }}
+          resizeMode="contain"
+        ></Image>
         <View style={{ marginLeft: 4 }}>
           <Text
             style={[
@@ -65,7 +87,7 @@ export const ScheduleCardHome = (props: any) => {
               },
             ]}
           >
-            Dr. Daryl Nehls
+            {props.DocName ? props.DocName : "Dr. Daryl Nehls"}
           </Text>
           <Text
             style={[
@@ -77,21 +99,21 @@ export const ScheduleCardHome = (props: any) => {
               },
             ]}
           >
-            Psychiatrist, M.D
+            {props.Qualification ? props.Qualification : "Psychiatrist, M.D"}
           </Text>
         </View>
       </View>
       <Image
         source={require("../assets/Ellipse80.png")}
-        style={[styles.shadeRight,{borderBottomRightRadius:16}]}
+        style={[styles.shadeRight, { borderBottomRightRadius: 16 }]}
       ></Image>
       <Image
         source={require("../assets/Ellipse81.png")}
-        style={[styles.shadeRight,{borderBottomRightRadius:16}]}
+        style={[styles.shadeRight, { borderBottomRightRadius: 16 }]}
       ></Image>
       <Image
         source={require("../assets/Ellipse82.png")}
-        style={[styles.shadeRight,{borderBottomRightRadius:16}]}
+        style={[styles.shadeRight, { borderBottomRightRadius: 16 }]}
       ></Image>
       <Image
         source={require("../assets/Depression.png")}
@@ -130,6 +152,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 0,
     right: 0,
-    resizeMode:"cover"
+    resizeMode: "cover",
   },
 });

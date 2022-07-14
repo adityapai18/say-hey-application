@@ -10,7 +10,7 @@ import {
 } from "firebase/auth";
 import axios from "axios";
 interface Authcon {
-  user: User | undefined;
+  user: User ;
   signin: (email: string, password: string) => void;
   signup: (
     email: string,
@@ -19,7 +19,9 @@ interface Authcon {
     lastName: string
   ) => void;
   signout: () => void;
-  trial:()=>void;
+  updateProfilePic:(
+    photourl:string
+  )=>void;
 }
 const authContext = createContext<Authcon | null>(null);
 
@@ -36,7 +38,6 @@ function useProvideAuth() {
   const signin = (email: string, password: string) => {
     signInWithEmailAndPassword(auth, email, password).then((response: any) => {
       setUser(response.user);
-      return response.user;
     }).catch((err)=>{
       alert(err);
     })
@@ -76,13 +77,20 @@ function useProvideAuth() {
     console.log(tokenData.user)
     axios
     // https://shielded-caverns-63372.herokuapp.com/api/user
-      .post("http://192.168.29.254:3000/api/user", {...tokenData.user,password})
+      .post("https://shielded-caverns-63372.herokuapp.com/api/user", {...tokenData.user,password})
       .then((response) => {
         console.log(response);
       }).catch(error=>{
         console.log(error.message);
       });
   };
+  const updateProfilePic=(photourl:string) =>{
+    updateProfile(user,{
+      photoURL:photourl
+    }).then(()=>{
+      console.log(user)
+    })
+  }
   //   const sendPasswordResetEmail = (email) => {
   //     return firebase
   //       .auth()
@@ -118,6 +126,7 @@ function useProvideAuth() {
     signup,
     signout,
     addUser,
+    updateProfilePic
     // sendPasswordResetEmail,
     // confirmPasswordReset,
   };

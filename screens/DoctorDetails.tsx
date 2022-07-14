@@ -13,12 +13,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { FONTS } from "../constants";
 import WebView from "react-native-webview";
 const DoctorDetails = ({ navigation, route }: any) => {
-  const [docData, setdocData] = useState();
+  const [docData, setdocData] = useState(route.params);
   const [visible, setvisible] = useState(false);
-  useEffect(() => {
-    setdocData(route.params);
-    console.log(route.params);
-  }, []);
   const showModal = () => setvisible(true);
   const hideModal = () => setvisible(false);
   return (
@@ -36,7 +32,7 @@ const DoctorDetails = ({ navigation, route }: any) => {
       </TouchableOpacity>
       <View style={{ height: "50%" }}>
         <ImageBackground
-          source={require("../assets/DoctorDetailsImg.png")}
+          source={{uri:docData.prof_pic}}
           resizeMode="contain"
           style={{ flex: 1 }}
         />
@@ -52,7 +48,7 @@ const DoctorDetails = ({ navigation, route }: any) => {
           }}
         >
           <Text style={[styles.text, { fontWeight: "400", fontSize: 28 }]}>
-            {docData && docData.doc_name}
+            {docData.doc_name}
           </Text>
           <Text
             style={[
@@ -65,7 +61,7 @@ const DoctorDetails = ({ navigation, route }: any) => {
               },
             ]}
           >
-            {docData && docData.qualification}, {docData && docData.specialist}
+            {docData.qualification}, { docData.specialist}
           </Text>
           <View
             style={{
@@ -86,7 +82,7 @@ const DoctorDetails = ({ navigation, route }: any) => {
                 <Image source={require("../assets/MedalIcon.png")}></Image>
               </View>
               <Text style={[styles.text, { color: "#6C7072", fontSize: 16 }]}>
-                {docData && docData.experience}
+                { docData.experience}
               </Text>
             </View>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -101,7 +97,7 @@ const DoctorDetails = ({ navigation, route }: any) => {
                 <Image source={require("../assets/RatingsIcon.png")}></Image>
               </View>
               <Text style={[styles.text, { color: "#6C7072", fontSize: 16 }]}>
-                {docData && docData.rating}
+                { docData.rating}
               </Text>
             </View>
           </View>
@@ -114,7 +110,7 @@ const DoctorDetails = ({ navigation, route }: any) => {
               { color: "#6C7072", fontSize: 14, lineHeight: 20 },
             ]}
           >
-            {docData && docData.decription
+            { docData.decription
               ? docData.decription
               : "Dr. Usman Yusuf is an M.B.B.S, Psychiatrist, MD with special" +
                 "interest Mental Health problems. He was awarded with the recent" +
@@ -133,7 +129,7 @@ const DoctorDetails = ({ navigation, route }: any) => {
           <Modal visible={visible} onDismiss={hideModal}>
             <View style={{ flex: 1 }}>
               <WebView
-                source={{ uri: "https://meetings.hubspot.com/say_hey" }}
+                source={{ uri: docData ? docData.blink : '' }}
                 originWhitelist={["*"]}
                 scrollEnabled={false}
                 startInLoadingState={true}
