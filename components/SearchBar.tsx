@@ -8,7 +8,7 @@ import {
   Image,
   Pressable,
 } from "react-native";
-
+import Ionicons from "@expo/vector-icons/Ionicons";
 const SearchBar = ({
   clicked,
   searchPhrase,
@@ -22,7 +22,7 @@ const SearchBar = ({
     <View style={[styles.container,{width:widthComplete}]}>
       <View style={[styles.searchBar__unclicked,{width:widthText}]}>
         {/* search Icon */}
-        <Image source={require("../assets/SearchIcon.png")} />
+        <Ionicons name="search" size={24} color="black" />
         {/* Input field */}
         <TextInput
           style={styles.input}

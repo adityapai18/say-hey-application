@@ -11,6 +11,7 @@ import {
   ImageBackground,
   GestureResponderEvent,
 } from "react-native";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { COLORS, FONTS, SHADOWS } from "../constants";
 interface doctorCard{
   DocName : String,
@@ -47,7 +48,7 @@ export const DoctorReviewCard = (props:doctorCard) => {
             >
               {props.Rating}
             </Text>
-            <Image source={require("../assets/ReviewStar.png")}></Image>
+            <Ionicons name="star" size={15} color="rgba(255, 196, 98, 1)" />
           </View>
         </View>
       </View>

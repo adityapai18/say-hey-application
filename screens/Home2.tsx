@@ -8,8 +8,10 @@ import {
   TouchableOpacity,
   ScrollView,
   RefreshControl,
+  Alert,
 } from "react-native";
 import SearchBar from "../components/SearchBar";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import CarouselCard from "../components/CarouselCards";
 import { COLORS, FONTS, SHADOWS } from "../constants";
 import { ScheduleCardHome } from "../components/ScheduleCardHome";
@@ -18,7 +20,7 @@ import { meetData } from "../lib/api/Connection";
 import { viewAllDoc } from "../lib/api/Connection";
 import { useAuth } from "../lib/auth/AuthContext";
 const Home2 = ({ navigation }: any) => {
-  const auth =useAuth();
+  const auth = useAuth();
   const [searchPhrase, setSearchPhrase] = useState("");
   const [upComingSchedule, setUpComingSchedule] = useState();
   const [clicked, setClicked] = useState(false);
@@ -26,20 +28,22 @@ const Home2 = ({ navigation }: any) => {
   const [refreshing, setRefreshing] = React.useState(false);
   useEffect(() => {
     getDocData();
-    meetData(auth?.user.email).then((value)=>{
-      console.log('start\n\n')
-      var minDate=Infinity;
-      value.data.appointments.map((item:any)=>{
-        const dateCom=new Date(item.engagement.timestamp)
-        const today = new Date()
-        if(dateCom.getTime()>today.getTime()){
-           minDate= Math.min(minDate,dateCom.getTime());
+    meetData(auth?.user.email).then((value) => {
+      console.log("start\n\n");
+      var minDate = Infinity;
+      value.data.appointments.map((item: any) => {
+        const dateCom = new Date(item.engagement.timestamp);
+        const today = new Date();
+        if (dateCom.getTime() > today.getTime()) {
+          minDate = Math.min(minDate, dateCom.getTime());
         }
-      })
-      const result = value.data.appointments.filter(item=>item.engagement.timestamp===minDate);
+      });
+      const result = value.data.appointments.filter(
+        (item) => item.engagement.timestamp === minDate
+      );
       setUpComingSchedule(result[0]);
-      console.log(upComingSchedule)
-    })
+      console.log(upComingSchedule);
+    });
   }, []);
   async function getDocData() {
     viewAllDoc().then((value) => {
@@ -52,28 +56,32 @@ const Home2 = ({ navigation }: any) => {
   };
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
-    meetData(auth?.user.email).then((value)=>{
-      console.log('start\n\n')
-      var minDate=Infinity;
-      value.data.appointments.map((item:any)=>{
-        const dateCom=new Date(item.engagement.timestamp)
-        const today = new Date()
-        if(dateCom.getTime()>today.getTime()){
-           minDate= Math.min(minDate,dateCom.getTime());
-        }
+    meetData(auth?.user.email)
+      .then((value) => {
+        console.log("start\n\n");
+        var minDate = Infinity;
+        value.data.appointments.map((item: any) => {
+          const dateCom = new Date(item.engagement.timestamp);
+          const today = new Date();
+          if (dateCom.getTime() > today.getTime()) {
+            minDate = Math.min(minDate, dateCom.getTime());
+          }
+        });
+        const result = value.data.appointments.filter(
+          (item) => item.engagement.timestamp === minDate
+        );
+        setUpComingSchedule(result[0]);
+        console.log(upComingSchedule);
       })
-      const result = value.data.appointments.filter(item=>item.engagement.timestamp===minDate);
-      setUpComingSchedule(result[0]);
-      console.log(upComingSchedule)
-    }).then((value)=>{
-      setRefreshing(false)
-    })
+      .then((value) => {
+        setRefreshing(false);
+      });
   }, [refreshing]);
   return (
     <ScrollView
-    refreshControl={
-      <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-    }
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
     >
       <SafeAreaView style={styles.container}>
         <View
@@ -108,10 +116,12 @@ const Home2 = ({ navigation }: any) => {
               navigation.navigate("NotificationScreen");
             }}
           >
-            <Image
-              source={require("../assets/Notification.png")}
-              style={{ margin: 16 }}
-            ></Image>
+            <Ionicons
+              name="notifications-outline"
+              size={30}
+              color="black"
+              style={{ margin: 10 }}
+            />
           </TouchableOpacity>
         </View>
         <View
@@ -127,10 +137,12 @@ const Home2 = ({ navigation }: any) => {
           <TouchableOpacity
             style={{ backgroundColor: "#0A94FF", borderRadius: 12 }}
           >
-            <Image
-              source={require("../assets/SettingsIcon.png")}
-              style={{ margin: 16 }}
-            ></Image>
+            <Ionicons
+              name="menu"
+              size={30}
+              color="white"
+              style={{ margin: 10 }}
+            />
           </TouchableOpacity>
         </View>
         <View
@@ -152,16 +164,60 @@ const Home2 = ({ navigation }: any) => {
           How are you feeling today?
         </Text>
         <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
-          <TouchableOpacity>
+          <TouchableOpacity
+          onPress={()=>{
+            Alert.alert('Mood Alert', 'We are happy for you! Keep having a good day.', [
+              {
+                text: 'Cancel',
+                onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel',
+              },
+              { text: 'OK', onPress: () => console.log('OK Pressed') },
+            ]);
+          }}
+          >
             <Image source={require("../assets/mood1.png")}></Image>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity
+          onPress={()=>{
+            Alert.alert('Mood Alert', "It's about how you end the day. Have a good day ahead", [
+              {
+                text: 'Cancel',
+                onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel',
+              },
+              { text: 'OK', onPress: () => console.log('OK Pressed') },
+            ]);
+          }}
+          >
             <Image source={require("../assets/mood2.png")}></Image>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity
+          onPress={()=>{
+            Alert.alert('Mood Alert', "We are always here for you.", [
+              {
+                text: 'Cancel',
+                onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel',
+              },
+              { text: 'OK', onPress: () => console.log('OK Pressed') },
+            ]);
+          }}
+          >
             <Image source={require("../assets/mood3.png")}></Image>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity
+          onPress={()=>{
+            Alert.alert('Mood Alert', "It can happen to anyone. Keep calm and be happy.", [
+              {
+                text: 'Cancel',
+                onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel',
+              },
+              { text: 'OK', onPress: () => console.log('OK Pressed') },
+            ]);
+          }}
+          >
             <Image source={require("../assets/mood4.png")}></Image>
           </TouchableOpacity>
         </View>
@@ -194,11 +250,15 @@ const Home2 = ({ navigation }: any) => {
           </TouchableOpacity>
         </View>
         <ScheduleCardHome
-        Key={upComingSchedule ? upComingSchedule.id : Math.random()}
-        dateTime={upComingSchedule ? upComingSchedule.engagement.timestamp:''}
-        DocName={upComingSchedule ? upComingSchedule.docdata1.doc_name :''}
-        Qualification={upComingSchedule ? upComingSchedule.docdata1.qualification :''}
-        profile={upComingSchedule ? upComingSchedule.docdata1.prof_pic :''}
+          Key={upComingSchedule ? upComingSchedule.id : Math.random()}
+          dateTime={
+            upComingSchedule ? upComingSchedule.engagement.timestamp : ""
+          }
+          DocName={upComingSchedule ? upComingSchedule.docdata1.doc_name : ""}
+          Qualification={
+            upComingSchedule ? upComingSchedule.docdata1.qualification : ""
+          }
+          profile={upComingSchedule ? upComingSchedule.docdata1.prof_pic : ""}
         />
         {/* <View
           style={{
@@ -292,7 +352,7 @@ const Home2 = ({ navigation }: any) => {
         <TouchableOpacity
           style={{ justifyContent: "center", alignItems: "center" }}
         >
-          <Image source={require("../assets/Home.png")}></Image>
+          <Ionicons name="home" size={24} color="#0A94FF" />
           <Text
             style={[
               styles.text,
@@ -308,7 +368,11 @@ const Home2 = ({ navigation }: any) => {
             navigation.navigate("ScheduleScreen");
           }}
         >
-          <Image source={require("../assets/Schedule.png")}></Image>
+          <Ionicons
+            name="calendar-sharp"
+            size={24}
+            color="rgba(169, 169, 169, 1)"
+          />
           <Text
             style={[
               styles.text,
@@ -323,7 +387,7 @@ const Home2 = ({ navigation }: any) => {
             Schedule
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={{ justifyContent: "center", alignItems: "center" }}
         >
           <Image source={require("../assets/Discover.png")}></Image>
@@ -335,14 +399,14 @@ const Home2 = ({ navigation }: any) => {
           >
             Discover
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <TouchableOpacity
           style={{ justifyContent: "center", alignItems: "center" }}
           onPress={() => {
             navigation.navigate("Profile");
           }}
         >
-          <Image source={require("../assets/Beranda.png")}></Image>
+          <Ionicons name="person" size={24} color="rgba(169, 169, 169, 1)" />
           <Text
             style={[
               styles.text,
