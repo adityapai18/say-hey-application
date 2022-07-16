@@ -1,5 +1,5 @@
 import { Text } from "@rneui/themed";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Formik } from "formik";
 import React from "react";
 import {
@@ -10,22 +10,45 @@ import {
   Button,
   Image,
   ScrollView,
-  Pressable
+  Pressable,
+  TouchableOpacity,
 } from "react-native";
 import Checkbox from "expo-checkbox";
 import { COLORS, FONTS, SHADOWS } from "../constants";
 import PhoneInput from "react-native-phone-number-input";
-import {
-  createUserWithEmailAndPassword,
-  updateProfile,
-} from "firebase/auth";
-import { useAuth } from '../lib/auth/AuthContext'; 
-const Signup = ({navigation}:any) => {
+import * as GoogleSignIn from 'expo-google-sign-in';
+import { useAuth } from "../lib/auth/AuthContext";
+const Signup = ({ navigation }: any) => {
   const [isSelected, setSelection] = useState(false);
   const auth = useAuth();
   function signUpFunc(value: any) {
-    auth?.signup(value.email,value.password,value.firstName,value.lastName);
+    auth?.signup(value.email, value.password, value.firstName, value.lastName);
   }
+  useEffect(()=>{
+    initAsync();
+  },[])
+  
+  const initAsync = async () => {
+    await GoogleSignIn.initAsync({
+      clientId:'669318155909-una5r35mjt4d9bk2mnej3c0nh6kg4vgi.apps.googleusercontent.com'
+    });
+    syncUserWithStateAsync();
+  };
+  const signInAsync = async () => {
+    try {
+      await GoogleSignIn.askForPlayServicesAsync();
+      const { type, user } = await GoogleSignIn.signInAsync();
+      if (type === 'success') {
+        syncUserWithStateAsync();
+      }
+    } catch ({ message }) {
+      alert(message);
+    }
+  };
+  const syncUserWithStateAsync = async () => {
+    const user = await GoogleSignIn.signInSilentlyAsync();
+    console.log(user)
+  };
   return (
     <ScrollView>
       <SafeAreaView style={styles.container}>
@@ -135,7 +158,7 @@ const Signup = ({navigation}:any) => {
                 </View>
                 <Button
                   color={"#0A94FF"}
-                  title="Submit"  
+                  title="Submit"
                   onPress={handleSubmit}
                 />
               </View>
@@ -153,23 +176,40 @@ const Signup = ({navigation}:any) => {
               marginTop: 15,
             }}
           >
-            <Image
-              source={require("../assets/Facebook.png")}
-              style={styles.logo}
-            />
-            <Image
-              source={require("../assets/Apple.png")}
-              style={styles.logo}
-            />
-            <Image
-              source={require("../assets/Google.png")}
-              style={styles.logo}
-            />
+            <TouchableOpacity
+            >
+              <Image
+                source={require("../assets/Facebook.png")}
+                style={styles.logo}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Image
+                source={require("../assets/Apple.png")}
+                style={styles.logo}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+            onPress={signInAsync}
+            >
+              <Image
+                source={require("../assets/Google.png")}
+                style={styles.logo}
+              />
+            </TouchableOpacity>
           </View>
-          <Text style={{ textAlign: "center", margin: 25 }} >
+          <Text style={{ textAlign: "center", margin: 25 }}>
             Already have an account?{" "}
-            <Pressable onPress={()=>{navigation.navigate("SignIn")}}>
-            <Text style={{ color: "#FF7360" ,textDecorationLine:"underline"}}>Login</Text>
+            <Pressable
+              onPress={() => {
+                navigation.navigate("SignIn");
+              }}
+            >
+              <Text
+                style={{ color: "#FF7360", textDecorationLine: "underline" }}
+              >
+                Login
+              </Text>
             </Pressable>
           </Text>
         </View>
