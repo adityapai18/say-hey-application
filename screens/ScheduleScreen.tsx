@@ -8,30 +8,32 @@ import {
   Image,
   Pressable,
   ScrollView,
-  RefreshControl
+  RefreshControl,
+  TouchableOpacity,
 } from "react-native";
 import { ScheduleCard } from "../components/ScheduleCard";
 import { meetData } from "../lib/api/Connection";
 import { COLORS, FONTS, SHADOWS } from "../constants";
 import { useAuth } from "../lib/auth/AuthContext";
+import RazorpayCheckout from "react-native-razorpay";
 const ScheduleScreen = ({ navigation }: any) => {
   const auth = useAuth();
   const [docData, setdocData] = useState();
   const [refreshing, setRefreshing] = React.useState(false);
-  useEffect(()=>{
-    meetData(auth?.user.email).then((value)=>{
-      console.log('start\n\n')
-      setdocData(value.data.appointments)
-    })
-  },[]);
+  useEffect(() => {
+    meetData(auth?.user.email).then((value) => {
+      setdocData(value.data.appointments);
+    });
+  }, []);
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
-    meetData(auth?.user.email).then((value)=>{
-      console.log('start\n\n')
-      setdocData(value.data.appointments)
-    }).then((value)=>{
-      setRefreshing(false)
-    })
+    meetData(auth?.user.email)
+      .then((value) => {
+        setdocData(value.data.appointments);
+      })
+      .then((value) => {
+        setRefreshing(false);
+      });
   }, [refreshing]);
   return (
     <SafeAreaView style={styles.container}>
@@ -47,30 +49,56 @@ const ScheduleScreen = ({ navigation }: any) => {
         </View>
       </View>
       <ScrollView
-      showsVerticalScrollIndicator={false}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }
-      >
-        {
-          docData && docData.map((item)=>{
-            console.log(item);
-            if(item.docdata1){
-              return <ScheduleCard
-                key={item.id}
-                Qualification={item.docdata1.qualification}
-                DocName={item.docdata1.doc_name}
-                profile={item.docdata1.prof_pic}
-                dateTime={item.engagement.timestamp}
-                end={item.metadata.endTime}
-              />
-            }
-          })
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
-        {/* <ScheduleCard />
-        <ScheduleCard />
-        <ScheduleCard />
-        <ScheduleCard /> */}
+      >
+        {docData &&
+          docData.map((item) => {
+            if (item.docdata1) {
+              return (
+                <ScheduleCard
+                  key={item.id}
+                  Qualification={item.docdata1.qualification}
+                  DocName={item.docdata1.doc_name}
+                  profile={item.docdata1.prof_pic}
+                  dateTime={item.engagement.timestamp}
+                  end={item.metadata.endTime}
+                />
+              );
+            }
+          })}
+        <TouchableOpacity
+          onPress={() => {
+            var options = {
+              description: "Credits towards consultation",
+              image: "https://i.imgur.com/3g7nmJC.png",
+              currency: "INR",
+              key: "rzp_live_HE6ZAVo4zXG0Ay",
+              amount: "5000",
+              name: "Acme Corp",
+              order_id: "order_DslnoIgkIDL8Zt", 
+              prefill: {
+                email: "gaurav.kumar@example.com",
+                contact: "9191919191",
+                name: "Gaurav Kumar",
+              },
+              theme: { color: "#53a20e" },
+            };
+            RazorpayCheckout.open(options)
+              .then((data) => {
+                // handle success
+                alert(`Success: ${data.razorpay_payment_id}`);
+              })
+              .catch((error) => {
+                // handle failure
+                alert(`Error: ${error.code} | ${error.description}`);
+              });
+          }}
+        >
+          <Text>PAYMENT</Text>
+        </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );

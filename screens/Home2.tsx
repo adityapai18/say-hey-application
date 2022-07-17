@@ -45,7 +45,7 @@ const Home2 = ({ navigation }: any) => {
       console.log(upComingSchedule);
     });
   }, []);
-  async function getDocData() {
+  function getDocData() {
     viewAllDoc().then((value) => {
       setDocData(value.data);
     });

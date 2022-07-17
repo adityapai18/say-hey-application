@@ -14,7 +14,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import Checkbox from "expo-checkbox";
-import { COLORS, FONTS, SHADOWS } from "../constants";
+import { COLORS, FONTS, SHADOWS } from "../constants"; 
 import PhoneInput from "react-native-phone-number-input";
 import * as GoogleSignIn from 'expo-google-sign-in';
 import { useAuth } from "../lib/auth/AuthContext";
@@ -24,31 +24,31 @@ const Signup = ({ navigation }: any) => {
   function signUpFunc(value: any) {
     auth?.signup(value.email, value.password, value.firstName, value.lastName);
   }
-  useEffect(()=>{
-    initAsync();
-  },[])
+  // useEffect(()=>{
+  //   initAsync();
+  // },[])
   
-  const initAsync = async () => {
-    await GoogleSignIn.initAsync({
-      clientId:'669318155909-una5r35mjt4d9bk2mnej3c0nh6kg4vgi.apps.googleusercontent.com'
-    });
-    syncUserWithStateAsync();
-  };
-  const signInAsync = async () => {
-    try {
-      await GoogleSignIn.askForPlayServicesAsync();
-      const { type, user } = await GoogleSignIn.signInAsync();
-      if (type === 'success') {
-        syncUserWithStateAsync();
-      }
-    } catch ({ message }) {
-      alert(message);
-    }
-  };
-  const syncUserWithStateAsync = async () => {
-    const user = await GoogleSignIn.signInSilentlyAsync();
-    console.log(user)
-  };
+  // const initAsync = async () => {
+  //   await GoogleSignIn.initAsync({
+  //     clientId:'669318155909-una5r35mjt4d9bk2mnej3c0nh6kg4vgi.apps.googleusercontent.com'
+  //   });
+  //   syncUserWithStateAsync();
+  // };
+  // const signInAsync = async () => {
+  //   try {
+  //     await GoogleSignIn.askForPlayServicesAsync();
+  //     const { type, user } = await GoogleSignIn.signInAsync();
+  //     if (type === 'success') {
+  //       syncUserWithStateAsync();
+  //     }
+  //   } catch ({ message }) {
+  //     alert(message);
+  //   }
+  // };
+  // const syncUserWithStateAsync = async () => {
+  //   const user = await GoogleSignIn.signInSilentlyAsync();
+  //   console.log(user)
+  // };
   return (
     <ScrollView>
       <SafeAreaView style={styles.container}>
@@ -190,7 +190,6 @@ const Signup = ({ navigation }: any) => {
               />
             </TouchableOpacity>
             <TouchableOpacity
-            onPress={signInAsync}
             >
               <Image
                 source={require("../assets/Google.png")}
@@ -200,7 +199,7 @@ const Signup = ({ navigation }: any) => {
           </View>
           <Text style={{ textAlign: "center", margin: 25 }}>
             Already have an account?{" "}
-            <Pressable
+            <TouchableOpacity
               onPress={() => {
                 navigation.navigate("SignIn");
               }}
@@ -210,7 +209,7 @@ const Signup = ({ navigation }: any) => {
               >
                 Login
               </Text>
-            </Pressable>
+            </TouchableOpacity>
           </Text>
         </View>
       </SafeAreaView>
