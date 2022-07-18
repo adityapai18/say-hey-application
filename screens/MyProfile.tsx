@@ -8,6 +8,7 @@ import {
   Image,
   Pressable,
   ScrollView,
+  StatusBar,
 } from "react-native";
 import { Button } from "@rneui/base";
 import { AppointmentCard } from "../components/AppointmentCard";
@@ -55,25 +56,25 @@ const MyProfile = ({ navigation }: any) => {
             </Text>
           </View>
         </View>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              navigation.navigate("EditProfile");
-            }}
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            navigation.navigate("EditProfile");
+          }}
+        >
+          <Text
+            style={[
+              styles.text,
+              {
+                fontSize: 13,
+                fontWeight: "800",
+                color: "#0A94FF",
+              },
+            ]}
           >
-            <Text
-              style={[
-                styles.text,
-                {
-                  fontSize: 13,
-                  fontWeight: "800",
-                  color: "#0A94FF",
-                },
-              ]}
-            >
-              Edit Profile
-            </Text>
-          </TouchableOpacity>
+            Edit Profile
+          </Text>
+        </TouchableOpacity>
         <View
           style={{
             flexDirection: "row",
@@ -180,8 +181,8 @@ const styles = StyleSheet.create({
     width: "75%",
     justifyContent: "center",
     alignItems: "center",
-    alignSelf:"center",
-    marginVertical:'8%'
+    alignSelf: "center",
+    marginVertical: "8%",
   },
 });
 

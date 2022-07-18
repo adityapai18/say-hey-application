@@ -9,6 +9,7 @@ import {
   ScrollView,
   RefreshControl,
   Alert,
+  StatusBar,
 } from "react-native";
 import SearchBar from "../components/SearchBar";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -29,7 +30,7 @@ const Home2 = ({ navigation }: any) => {
   useEffect(() => {
     getDocData();
     meetData(auth?.user.email).then((value) => {
-      console.log("start\n\n");
+      console.log(value);
       var minDate = Infinity;
       value.data.appointments.map((item: any) => {
         const dateCom = new Date(item.engagement.timestamp);
@@ -58,18 +59,21 @@ const Home2 = ({ navigation }: any) => {
     setRefreshing(true);
     meetData(auth?.user.email)
       .then((value) => {
-        console.log("start\n\n");
+        console.log(value);
         var minDate = Infinity;
-        value.data.appointments.map((item: any) => {
-          const dateCom = new Date(item.engagement.timestamp);
-          const today = new Date();
-          if (dateCom.getTime() > today.getTime()) {
-            minDate = Math.min(minDate, dateCom.getTime());
-          }
-        });
-        const result = value.data.appointments.filter(
-          (item) => item.engagement.timestamp === minDate
-        );
+        var result = [];
+        if (value.data.appointments) {
+          value.data.appointments.map((item: any) => {
+            const dateCom = new Date(item.engagement.timestamp);
+            const today = new Date();
+            if (dateCom.getTime() > today.getTime()) {
+              minDate = Math.min(minDate, dateCom.getTime());
+            }
+          });
+          result = value.data.appointments.filter(
+            (item) => item.engagement.timestamp === minDate
+          );
+        }
         setUpComingSchedule(result[0]);
         console.log(upComingSchedule);
       })
@@ -79,10 +83,16 @@ const Home2 = ({ navigation }: any) => {
   }, [refreshing]);
   return (
     <ScrollView
+      showsVerticalScrollIndicator={false}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
     >
+      <StatusBar
+        animated={true}
+        backgroundColor="#F5F8FA"
+        barStyle={"dark-content"}
+      />
       <SafeAreaView style={styles.container}>
         <View
           style={{
@@ -165,58 +175,70 @@ const Home2 = ({ navigation }: any) => {
         </Text>
         <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
           <TouchableOpacity
-          onPress={()=>{
-            Alert.alert('Mood Alert', 'We are happy for you! Keep having a good day.', [
-              {
-                text: 'Cancel',
-                onPress: () => console.log('Cancel Pressed'),
-                style: 'cancel',
-              },
-              { text: 'OK', onPress: () => console.log('OK Pressed') },
-            ]);
-          }}
+            onPress={() => {
+              Alert.alert(
+                "Mood Alert",
+                "We are happy for you! Keep having a good day.",
+                [
+                  {
+                    text: "Cancel",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel",
+                  },
+                  { text: "OK", onPress: () => console.log("OK Pressed") },
+                ]
+              );
+            }}
           >
             <Image source={require("../assets/mood1.png")}></Image>
           </TouchableOpacity>
           <TouchableOpacity
-          onPress={()=>{
-            Alert.alert('Mood Alert', "It's about how you end the day. Have a good day ahead", [
-              {
-                text: 'Cancel',
-                onPress: () => console.log('Cancel Pressed'),
-                style: 'cancel',
-              },
-              { text: 'OK', onPress: () => console.log('OK Pressed') },
-            ]);
-          }}
+            onPress={() => {
+              Alert.alert(
+                "Mood Alert",
+                "It's about how you end the day. Have a good day ahead",
+                [
+                  {
+                    text: "Cancel",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel",
+                  },
+                  { text: "OK", onPress: () => console.log("OK Pressed") },
+                ]
+              );
+            }}
           >
             <Image source={require("../assets/mood2.png")}></Image>
           </TouchableOpacity>
           <TouchableOpacity
-          onPress={()=>{
-            Alert.alert('Mood Alert', "We are always here for you.", [
-              {
-                text: 'Cancel',
-                onPress: () => console.log('Cancel Pressed'),
-                style: 'cancel',
-              },
-              { text: 'OK', onPress: () => console.log('OK Pressed') },
-            ]);
-          }}
+            onPress={() => {
+              Alert.alert("Mood Alert", "We are always here for you.", [
+                {
+                  text: "Cancel",
+                  onPress: () => console.log("Cancel Pressed"),
+                  style: "cancel",
+                },
+                { text: "OK", onPress: () => console.log("OK Pressed") },
+              ]);
+            }}
           >
             <Image source={require("../assets/mood3.png")}></Image>
           </TouchableOpacity>
           <TouchableOpacity
-          onPress={()=>{
-            Alert.alert('Mood Alert', "It can happen to anyone. Keep calm and be happy.", [
-              {
-                text: 'Cancel',
-                onPress: () => console.log('Cancel Pressed'),
-                style: 'cancel',
-              },
-              { text: 'OK', onPress: () => console.log('OK Pressed') },
-            ]);
-          }}
+            onPress={() => {
+              Alert.alert(
+                "Mood Alert",
+                "It can happen to anyone. Keep calm and be happy.",
+                [
+                  {
+                    text: "Cancel",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel",
+                  },
+                  { text: "OK", onPress: () => console.log("OK Pressed") },
+                ]
+              );
+            }}
           >
             <Image source={require("../assets/mood4.png")}></Image>
           </TouchableOpacity>
@@ -426,7 +448,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingLeft: 16,
     paddingRight: 16,
-    paddingTop: 16,
     backgroundColor: COLORS.offWhite,
   },
 

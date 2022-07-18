@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "669318155909",
+    "project_id": "sayhey-app-auth",
+    "storage_bucket": "sayhey-app-auth.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:669318155909:android:ef499e21367f23b01f23ec",
+        "android_client_info": {
+          "package_name": "com.sayhey.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "669318155909-una5r35mjt4d9bk2mnej3c0nh6kg4vgi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sayhey.app",
+            "certificate_hash": "cd39f7d5d442318806b833e9b3542b8760ac7c05"
+          }
+        },
+        {
+          "client_id": "669318155909-v812djkanngo0k6hgph2ecofe2u22t6p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcYLSmvQ35naNZlAw7MN9UsKnLjBhqo0M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "669318155909-v812djkanngo0k6hgph2ecofe2u22t6p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
