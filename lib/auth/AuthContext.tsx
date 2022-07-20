@@ -1,16 +1,8 @@
 import React, { useState, useEffect, useContext, createContext } from "react";
-import { auth } from "../../firebase";
-import {
-  signInWithEmailAndPassword,
-  signOut,
-  createUserWithEmailAndPassword,
-  onAuthStateChanged,
-  updateProfile,
-  User,
-} from "firebase/auth";
+import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
 import axios from "axios";
 interface Authcon {
-  user: User ;
+  user: FirebaseAuthTypes.User ;
   signin: (email: string, password: string) => void;
   signup: (
     email: string,
@@ -19,9 +11,7 @@ interface Authcon {
     lastName: string
   ) => void;
   signout: () => void;
-  updateProfilePic:(
-    photourl:string
-  )=>void;
+  updateProfilePic: (photourl: string) => void;
 }
 const authContext = createContext<Authcon | null>(null);
 
@@ -34,13 +24,17 @@ export const useAuth = () => {
   return useContext(authContext);
 };
 function useProvideAuth() {
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<FirebaseAuthTypes.User | null>();
   const signin = (email: string, password: string) => {
-    signInWithEmailAndPassword(auth, email, password).then((response: any) => {
-      setUser(response.user);
-    }).catch((err)=>{
-      alert(err);
-    })
+    auth()
+      .signInWithEmailAndPassword(email, password)
+      .then((response: any) => {
+        setUser(response.user);
+        console.log(response.user)
+      })
+      .catch((err) => {
+        alert(err);
+      });
   };
   const signup = (
     email: string,
@@ -48,14 +42,16 @@ function useProvideAuth() {
     firstName: string,
     lastName: string
   ) => {
-    createUserWithEmailAndPassword(auth, email, password)
+    auth()
+      .createUserWithEmailAndPassword(email, password)
       .then((response: any) => {
-        updateProfile(response.user, {
-          displayName: firstName + " " + lastName,
-        })
+        auth()
+          .currentUser?.updateProfile({
+            displayName: firstName + " " + lastName,
+          })
           .then(() => {
-            setUser(response.user);
-            addUser(response,password)
+            setUser(auth().currentUser);
+            addUser(response, password);
             return response;
           })
           .catch((error: any) => {
@@ -68,29 +64,35 @@ function useProvideAuth() {
       });
   };
   const signout = () => {
-    signOut(auth).then(() => {
-      setUser(undefined);
-    });
+    auth()
+      .signOut()
+      .then(() => {
+        setUser(undefined);
+      });
   };
-  const addUser = (tokenData: any, password:string) => {
-    console.log(tokenData)
-    console.log(tokenData.user)
+  const addUser = (tokenData: any, password: string) => {
+    console.log(tokenData);
+    console.log(tokenData.user);
     axios
-    // https://shielded-caverns-63372.herokuapp.com/api/user
-      .post("https://shielded-caverns-63372.herokuapp.com/api/user", {...tokenData.user,password})
+      // https://shielded-caverns-63372.herokuapp.com/api/user
+      .post("https://shielded-caverns-63372.herokuapp.com/api/user", {
+        ...tokenData.user,
+        password,
+      })
       .then((response) => {
         console.log(response);
-      }).catch(error=>{
+      })
+      .catch((error) => {
         console.log(error.message);
       });
   };
-  const updateProfilePic=(photourl:string) =>{
-    updateProfile(user,{
-      photoURL:photourl
-    }).then(()=>{
-      console.log(user)
-    })
-  }
+  const updateProfilePic = (photourl: string) => {
+    auth().currentUser?.updateProfile({
+      photoURL: photourl,
+    }).then(() => {
+      console.log(user);
+    });
+  };
   //   const sendPasswordResetEmail = (email) => {
   //     return firebase
   //       .auth()
@@ -109,7 +111,7 @@ function useProvideAuth() {
   //   };
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = auth().onAuthStateChanged((user) => {
       if (user) {
         setUser(user);
       } else {
@@ -126,7 +128,7 @@ function useProvideAuth() {
     signup,
     signout,
     addUser,
-    updateProfilePic
+    updateProfilePic,
     // sendPasswordResetEmail,
     // confirmPasswordReset,
   };

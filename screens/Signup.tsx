@@ -12,11 +12,11 @@ import {
   ScrollView,
   Pressable,
   TouchableOpacity,
+  StatusBar,
 } from "react-native";
 import Checkbox from "expo-checkbox";
-import { COLORS, FONTS, SHADOWS } from "../constants"; 
+import { COLORS, FONTS, SHADOWS } from "../constants";
 import PhoneInput from "react-native-phone-number-input";
-import * as GoogleSignIn from 'expo-google-sign-in';
 import { useAuth } from "../lib/auth/AuthContext";
 const Signup = ({ navigation }: any) => {
   const [isSelected, setSelection] = useState(false);
@@ -27,7 +27,7 @@ const Signup = ({ navigation }: any) => {
   // useEffect(()=>{
   //   initAsync();
   // },[])
-  
+
   // const initAsync = async () => {
   //   await GoogleSignIn.initAsync({
   //     clientId:'669318155909-una5r35mjt4d9bk2mnej3c0nh6kg4vgi.apps.googleusercontent.com'
@@ -52,6 +52,11 @@ const Signup = ({ navigation }: any) => {
   return (
     <ScrollView>
       <SafeAreaView style={styles.container}>
+        <StatusBar
+          animated={true}
+          backgroundColor="#F5F8FA"
+          barStyle={"dark-content"}
+        />
         <View>
           <Text h3 style={styles.text}>
             Welcome to {""}
@@ -176,8 +181,7 @@ const Signup = ({ navigation }: any) => {
               marginTop: 15,
             }}
           >
-            <TouchableOpacity
-            >
+            <TouchableOpacity>
               <Image
                 source={require("../assets/Facebook.png")}
                 style={styles.logo}
@@ -189,8 +193,7 @@ const Signup = ({ navigation }: any) => {
                 style={styles.logo}
               />
             </TouchableOpacity>
-            <TouchableOpacity
-            >
+            <TouchableOpacity>
               <Image
                 source={require("../assets/Google.png")}
                 style={styles.logo}

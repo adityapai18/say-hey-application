@@ -11,8 +11,6 @@ import {
 } from "react-native";
 import { COLORS, FONTS, SHADOWS } from "../constants";
 import { useAuth } from "../lib/auth/AuthContext";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase";
 const SignIn = ({ navigation }: any) => {
   const user = useAuth();
   const signInAuth=(value:any)=>

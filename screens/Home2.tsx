@@ -260,7 +260,11 @@ const Home2 = ({ navigation }: any) => {
           >
             Upcoming schedule?
           </Text>
-          <TouchableOpacity>
+          <TouchableOpacity
+          onPress={()=>{
+            navigation.navigate('ScheduleScreen')
+          }}
+          >
             <Text
               style={[
                 styles.text,

@@ -8,6 +8,8 @@ import {
   Image,
   Pressable,
   ScrollView,
+  ActivityIndicator,
+  GestureResponderEvent,
 } from "react-native";
 import { Divider } from "@rneui/themed";
 import { COLORS, FONTS, SHADOWS } from "../constants";
@@ -16,20 +18,23 @@ interface Schedule {
   DocName: String;
   Qualification: String;
   profile: String;
-  dateTime: Number;
-  end: Number;
-  key: number;
+  dateTime: number;
+  end: number;
+  key: any;
   engId: number;
   DocAmount: number;
   payment: boolean | null | undefined;
+  onPressReschedule :(((event: GestureResponderEvent) => void) & (() => void)) | undefined
+  onPressCancel :(((event: GestureResponderEvent) => void) & (() => void)) | undefined
+
 }
 import axios from "axios";
 import RazorpayCheckout from "react-native-razorpay";
 import { useAuth } from "../lib/auth/AuthContext";
 export const ScheduleCard = (props: Schedule) => {
-  console.log(props);
   const date = new Date(props.dateTime);
   const endTime = new Date(props.end);
+  const [animating, setAnimating] = useState(false);
   const [meetDet, setdate] = useState({
     scheduleDate: date.toLocaleDateString(),
     start: date.toLocaleTimeString(),
@@ -37,6 +42,7 @@ export const ScheduleCard = (props: Schedule) => {
   });
   const auth = useAuth();
   const CreateOrder = () => {
+    setAnimating(true);
     axios
       .post("https://shielded-caverns-63372.herokuapp.com/api/payment/order", {
         user_id: auth?.user.uid,
@@ -55,6 +61,7 @@ export const ScheduleCard = (props: Schedule) => {
     payentAmount: number,
     orderId: string
   ) => {
+    setAnimating(false);
     var options = {
       description: docName + " consultation",
       image:
@@ -74,8 +81,8 @@ export const ScheduleCard = (props: Schedule) => {
       .then((data) => {
         // handle success
         alert(`Success !!`);
-        console.log({...data});
-        sendConfirmation(data)
+        console.log({ ...data });
+        sendConfirmation(data);
       })
       .catch((error) => {
         // handle failure
@@ -83,19 +90,26 @@ export const ScheduleCard = (props: Schedule) => {
         alert(`Error: ${error.code} | ${error.description}`);
       });
   };
-  const sendConfirmation=(data:any)=>{
+  const sendConfirmation = (data: any) => {
     axios
       .post("https://shielded-caverns-63372.herokuapp.com/api/payment/verify", {
         razorpay_order_id: data.razorpay_order_id,
         razorpay_payment_id: data.razorpay_payment_id,
         razorpay_signature: data.razorpay_signature,
-        eng_id:props.engId 
-      }).then((val)=>{
-        console.log(val.data)
+        eng_id: props.engId,
+      })
+      .then((val) => {
+        console.log(val.data);
       });
-  }
+  };
   return (
     <View style={styles.ScheduleCard} key={props.key}>
+      {/* <ActivityIndicator
+        animating={animating}
+        color="#0A94FF"
+        size="large"
+        style={{ flex: 1 , display:'none'}}
+      /> */}
       <View style={{ flexDirection: "row" }}>
         <Image
           source={{ uri: props.profile }}
@@ -191,7 +205,9 @@ export const ScheduleCard = (props: Schedule) => {
           </TouchableOpacity>
         ) : (
           <>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button}
+            onPress={props.onPressCancel}
+            >
               <Text
                 style={[
                   styles.text,
@@ -203,6 +219,7 @@ export const ScheduleCard = (props: Schedule) => {
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.button, { backgroundColor: "#0A94FF" }]}
+              onPress={props.onPressReschedule}
             >
               <Text
                 style={[
