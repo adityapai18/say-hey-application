@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useContext, createContext } from "react";
 import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
 import axios from "axios";
+import { GoogleSignin, statusCodes } from "@react-native-google-signin/google-signin";
 interface Authcon {
-  user: FirebaseAuthTypes.User ;
+  user: FirebaseAuthTypes.User;
   signin: (email: string, password: string) => void;
   signup: (
     email: string,
@@ -12,6 +13,7 @@ interface Authcon {
   ) => void;
   signout: () => void;
   updateProfilePic: (photourl: string) => void;
+  onGoogleButtonPress: () => Promise<FirebaseAuthTypes.UserCredential>;
 }
 const authContext = createContext<Authcon | null>(null);
 
@@ -30,7 +32,7 @@ function useProvideAuth() {
       .signInWithEmailAndPassword(email, password)
       .then((response: any) => {
         setUser(response.user);
-        console.log(response.user)
+        console.log(response.user);
       })
       .catch((err) => {
         alert(err);
@@ -74,7 +76,6 @@ function useProvideAuth() {
     console.log(tokenData);
     console.log(tokenData.user);
     axios
-      // https://shielded-caverns-63372.herokuapp.com/api/user
       .post("https://shielded-caverns-63372.herokuapp.com/api/user", {
         ...tokenData.user,
         password,
@@ -87,11 +88,27 @@ function useProvideAuth() {
       });
   };
   const updateProfilePic = (photourl: string) => {
-    auth().currentUser?.updateProfile({
-      photoURL: photourl,
-    }).then(() => {
-      console.log(user);
+    auth()
+      .currentUser?.updateProfile({
+        photoURL: photourl,
+      })
+      .then(() => {
+        console.log(user);
+      });
+  };
+
+  const onGoogleButtonPress= async () => {
+    GoogleSignin.configure({
+      webClientId: '669318155909-v812djkanngo0k6hgph2ecofe2u22t6p.apps.googleusercontent.com',
     });
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      setUser(userInfo)
+    } catch (error) {
+      console.log(error)
+      alert(error)
+    }
   };
   //   const sendPasswordResetEmail = (email) => {
   //     return firebase
@@ -129,6 +146,7 @@ function useProvideAuth() {
     signout,
     addUser,
     updateProfilePic,
+    onGoogleButtonPress,
     // sendPasswordResetEmail,
     // confirmPasswordReset,
   };

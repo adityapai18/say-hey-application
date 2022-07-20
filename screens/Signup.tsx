@@ -193,7 +193,11 @@ const Signup = ({ navigation }: any) => {
                 style={styles.logo}
               />
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity
+            onPress={()=>{
+              auth?.onGoogleButtonPress();
+            }}  
+            >
               <Image
                 source={require("../assets/Google.png")}
                 style={styles.logo}

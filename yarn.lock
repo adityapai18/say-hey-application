@@ -2189,6 +2189,11 @@
   resolved "https://registry.yarnpkg.com/@react-native-firebase/messaging/-/messaging-15.1.1.tgz#3079ddc8aaba1a758495ee16d460653f5701e74e"
   integrity sha512-oWN4/919U44jJQDKVd5+OIviIZ6jTZkMOVVvCLwtMh9WXI0tCd/E+be8zOjH3jHi6M0Zkf0IOXOd0QuwyrmQZw==
 
+"@react-native-google-signin/google-signin@^8.0.0":
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/@react-native-google-signin/google-signin/-/google-signin-8.0.0.tgz#f8202c121b4df185eb165dc58b35544c643af25f"
+  integrity sha512-GV0EGXUfiqk9Kav74zOq4ww0rAhMUlwmIGEf94X2ptnxfKu9TufeTig1zuDQGasgFlziWju/Ya2WeC+7TYSbxw==
+
 "@react-native/assets@1.0.0":
   version "1.0.0"
   resolved "https://registry.npmjs.org/@react-native/assets/-/assets-1.0.0.tgz"
