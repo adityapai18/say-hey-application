@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useContext, createContext } from "react";
 import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
 import axios from "axios";
-import { GoogleSignin, statusCodes } from "@react-native-google-signin/google-signin";
+import {
+  GoogleSignin,
+  statusCodes,
+} from "@react-native-google-signin/google-signin";
 interface Authcon {
   user: FirebaseAuthTypes.User;
   signin: (email: string, password: string) => void;
@@ -93,21 +96,30 @@ function useProvideAuth() {
         photoURL: photourl,
       })
       .then(() => {
-        console.log(user);
+        setUser(auth().currentUser);
       });
   };
 
-  const onGoogleButtonPress= async () => {
+  const onGoogleButtonPress = async () => {
     GoogleSignin.configure({
-      webClientId: '669318155909-v812djkanngo0k6hgph2ecofe2u22t6p.apps.googleusercontent.com',
+      webClientId:
+        "669318155909-v812djkanngo0k6hgph2ecofe2u22t6p.apps.googleusercontent.com",
     });
     try {
-      await GoogleSignin.hasPlayServices();
-      const userInfo = await GoogleSignin.signIn();
-      setUser(userInfo)
+      const { idToken } = await GoogleSignin.signIn();
+
+      // Create a Google credential with the token
+      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+
+      // Sign-in the user with the credential
+      const authuser = auth().signInWithCredential(googleCredential);
+      authuser.then((value)=>{
+        console.log(value)
+        setUser(value.user);
+      })
     } catch (error) {
-      console.log(error)
-      alert(error)
+      console.log(error);
+      alert(error);
     }
   };
   //   const sendPasswordResetEmail = (email) => {
