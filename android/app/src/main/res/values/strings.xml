@@ -2,4 +2,6 @@
   <string name="app_name">Say Hey</string>
   <string name="expo_splash_screen_resize_mode" translatable="false">contain</string>
   <string name="expo_splash_screen_status_bar_translucent" translatable="false">false</string>
+  <string name="facebook_app_id">1729315924070723</string>
+  <string name="facebook_client_token">cb31a2ae986f8a007c0a7fcfe442b933</string>
 </resources>

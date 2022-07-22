@@ -11,6 +11,7 @@ import DateAndTimeSelectScreen from "../screens/DateAndTimeSelectScreen"
 import DoctorDetails from "../screens/DoctorDetails";
 import MyProfile from "../screens/MyProfile"
 import CalendlyBookingPage from "../screens/CalendlyBookingPage";
+import PdfViewPage from "../screens/PdfViewPage";
 import { CustomMenu } from "../components/CustomMenu";
 import EditProfile from "../screens/EditProfile"
 import { FONTS } from "../constants";
@@ -172,6 +173,7 @@ export default function UserStack() {
               },
             }}
           />
+          
         </Stack.Navigator>
     </PaperProvider>
   );

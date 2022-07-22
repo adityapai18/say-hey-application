@@ -153,13 +153,36 @@ const Signup = ({ navigation }: any) => {
                     value={isSelected}
                     onValueChange={setSelection}
                   />
-                  <Text style={{ marginLeft: 20, letterSpacing: 1 }}>
-                    By clicking here I agree SAYHEY'S {"\n"}
-                    <Text style={{ color: "#0A94FF" }}>
-                      Terms Of Service
-                    </Text>{" "}
-                    and <Text style={{ color: "#0A94FF" }}>Privacy Policy</Text>
-                  </Text>
+                  <View
+                    style={{
+                      marginLeft: 20,
+                      flexDirection: "row",
+                      flexWrap: "wrap",
+                    }}
+                  >
+                    <Text> By clicking here I agree SAYHEY'S</Text>
+                    <TouchableOpacity
+                      onPress={() => {
+                        navigation.navigate("PdfViewPage", {
+                          pdfBool: true,
+                        });
+                      }}
+                    >
+                      <Text style={{ color: "#0A94FF" }}>
+                        Terms Of Service{" "}
+                      </Text>
+                    </TouchableOpacity>
+                    <Text>and </Text>
+                    <TouchableOpacity
+                      onPress={() => {
+                        navigation.navigate("PdfViewPage", {
+                          pdfBool: false,
+                        });
+                      }}
+                    >
+                      <Text style={{ color: "#0A94FF" }}>Privacy Policy</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
                 <Button
                   color={"#0A94FF"}
@@ -181,22 +204,20 @@ const Signup = ({ navigation }: any) => {
               marginTop: 15,
             }}
           >
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                auth?.onFacebookButtonPress();
+              }}
+            >
               <Image
                 source={require("../assets/Facebook.png")}
                 style={styles.logo}
               />
             </TouchableOpacity>
-            <TouchableOpacity>
-              <Image
-                source={require("../assets/Apple.png")}
-                style={styles.logo}
-              />
-            </TouchableOpacity>
             <TouchableOpacity
-            onPress={()=>{
-              auth?.onGoogleButtonPress();
-            }}  
+              onPress={() => {
+                auth?.onGoogleButtonPress();
+              }}
             >
               <Image
                 source={require("../assets/Google.png")}
@@ -275,8 +296,8 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   logo: {
-    width: 30,
-    height: 30,
+    width: 35,
+    height: 35,
   },
 });
 

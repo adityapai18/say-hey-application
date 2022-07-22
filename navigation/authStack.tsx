@@ -1,7 +1,8 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-
+import PdfViewPage from "../screens/PdfViewPage";
+import { FONTS } from "../constants";
 import SignIn from "../screens/Signin";
 import Signup from "../screens/Signup";
 
@@ -24,6 +25,21 @@ export default function AuthStack() {
             headerShown: false,
           }}
         />
+        <Stack.Screen
+            name="PdfViewPage"
+            component={PdfViewPage}
+            options={{
+              title: "Booking Page",
+              headerShown:false,
+              headerTitleAlign: "center",
+              headerTitleStyle: {
+                fontFamily: FONTS.regular,
+                fontWeight: "700",
+                color: "#404446",
+                fontSize: 18,
+              },
+            }}
+            />
       </Stack.Navigator>
   );
 }

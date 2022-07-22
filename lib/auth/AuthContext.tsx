@@ -5,6 +5,8 @@ import {
   GoogleSignin,
   statusCodes,
 } from "@react-native-google-signin/google-signin";
+import { LoginManager, AccessToken } from "react-native-fbsdk-next";
+
 interface Authcon {
   user: FirebaseAuthTypes.User;
   signin: (email: string, password: string) => void;
@@ -16,7 +18,8 @@ interface Authcon {
   ) => void;
   signout: () => void;
   updateProfilePic: (photourl: string) => void;
-  onGoogleButtonPress: () => Promise<FirebaseAuthTypes.UserCredential>;
+  onGoogleButtonPress: () => void;
+  onFacebookButtonPress: () => void;
 }
 const authContext = createContext<Authcon | null>(null);
 
@@ -113,14 +116,44 @@ function useProvideAuth() {
 
       // Sign-in the user with the credential
       const authuser = auth().signInWithCredential(googleCredential);
-      authuser.then((value)=>{
-        console.log(value)
+      authuser.then((value) => {
+        console.log(value);
         setUser(value.user);
-      })
+      });
     } catch (error) {
       console.log(error);
       alert(error);
     }
+  };
+  const onFacebookButtonPress = async () => {
+    // Attempt login with permissions
+    const result = await LoginManager.logInWithPermissions([
+      "public_profile",
+      "email",
+    ]);
+
+    if (result.isCancelled) {
+      throw "User cancelled the login process";
+    }
+
+    // Once signed in, get the users AccesToken
+    const data = await AccessToken.getCurrentAccessToken();
+
+    if (!data) {
+      throw "Something went wrong obtaining access token";
+    }
+
+    // Create a Firebase credential with the AccessToken
+    const facebookCredential = auth.FacebookAuthProvider.credential(
+      data.accessToken
+    );
+
+    // Sign-in the user with the credential
+    const authuser = auth().signInWithCredential(facebookCredential);
+    authuser.then((value) => {
+      console.log(value);
+      setUser(value.user);
+    });
   };
   //   const sendPasswordResetEmail = (email) => {
   //     return firebase
@@ -159,6 +192,7 @@ function useProvideAuth() {
     addUser,
     updateProfilePic,
     onGoogleButtonPress,
+    onFacebookButtonPress,
     // sendPasswordResetEmail,
     // confirmPasswordReset,
   };
