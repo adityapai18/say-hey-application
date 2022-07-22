@@ -26,13 +26,15 @@ interface Schedule {
   payment: boolean | null | undefined;
   onPressReschedule :(((event: GestureResponderEvent) => void) & (() => void)) | undefined
   onPressCancel :(((event: GestureResponderEvent) => void) & (() => void)) | undefined
-
+  RefreshListen: () => Promise<void>;
 }
 import axios from "axios";
 import RazorpayCheckout from "react-native-razorpay";
 import { useAuth } from "../lib/auth/AuthContext";
 export const ScheduleCard = (props: Schedule) => {
+  console.log(props)
   const date = new Date(props.dateTime);
+  console.log(date)
   const endTime = new Date(props.end);
   const [animating, setAnimating] = useState(false);
   const [meetDet, setdate] = useState({
@@ -42,7 +44,6 @@ export const ScheduleCard = (props: Schedule) => {
   });
   const auth = useAuth();
   const CreateOrder = () => {
-    setAnimating(true);
     axios
       .post("https://shielded-caverns-63372.herokuapp.com/api/payment/order", {
         user_id: auth?.user.uid,
@@ -52,7 +53,7 @@ export const ScheduleCard = (props: Schedule) => {
         reciept: "abnxcksnbcs2324",
       })
       .then((val) => {
-        console.log(val.data.order.id);
+        console.log(val.data.order);
         RazorPayment(props.DocName, val.data.amount, val.data.order.id);
       });
   };
