@@ -1,9 +1,10 @@
 import React from "react";
 import { TouchableOpacity, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import MedicalRecords from "../screens/MedicalRecords";
 import { Menu } from "react-native-paper";
+import { useAuth } from "../lib/auth/AuthContext";
 export const CustomMenu = () => {
+  const auth = useAuth();
   const [showMenu, setShowMenu] = React.useState(false);
   const navigation = useNavigation();
   return (
@@ -23,7 +24,7 @@ export const CustomMenu = () => {
           }}
           title="My Records"
         />
-        <Menu.Item onPress={() => {}} title="Item 2" />
+        <Menu.Item onPress={() => {auth?.signout()}} title="Sign Out" />
         <Menu.Item onPress={() => {}} title="Item 3" />
       </Menu>
     </TouchableOpacity>

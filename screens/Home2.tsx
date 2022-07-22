@@ -30,7 +30,6 @@ const Home2 = ({ navigation }: any) => {
   useEffect(() => {
     getDocData();
     meetData(auth?.user.email).then((value) => {
-      console.log(value);
       var minDate = Infinity;
       value.data.appointments.map((item: any) => {
         const dateCom = new Date(item.engagement.timestamp);

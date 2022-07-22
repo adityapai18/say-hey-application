@@ -11,13 +11,10 @@ import {
   ImageBackground,
   Switch,
 } from "react-native";
-import { storage } from "../firebase";
 import * as ImagePicker from "expo-image-picker";
 import { COLORS, FONTS, SHADOWS, SIZES } from "../constants";
-import { app } from "../firebase";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import storage from "@react-native-firebase/storage";
 import { useAuth } from "../lib/auth/AuthContext";
-
 const EditProfile = ({ navigation }: any) => {
   const auth = useAuth();
   const [image, setImage] = useState(auth?.user.photoURL);
@@ -39,12 +36,18 @@ const EditProfile = ({ navigation }: any) => {
     const response = await fetch(uri);
     const blob = await response.blob();
     const filename = uri.substring(uri.lastIndexOf("/") + 1);
-    const address = ref(storage, filename);
-    await uploadBytes(address, blob).then((snapshot) => {
-      getDownloadURL(snapshot.ref).then((url) => {
-        auth?.updateProfilePic(url);
+    storage()
+      .ref(filename)
+      .put(blob)
+      .then((snapshot) => {
+        storage()
+          .ref(filename)
+          .getDownloadURL()
+          .then((value) => {
+            console.log("got download");
+            auth?.updateProfilePic(value);
+          });
       });
-    });
   };
   return (
     <SafeAreaView style={styles.container}>
@@ -205,10 +208,11 @@ const EditProfile = ({ navigation }: any) => {
             />
           </View>
         </View>
-        <TouchableOpacity style={styles.button}
-        onPress={()=>{
-          navigation.popToTop();
-        }}
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            navigation.popToTop();
+          }}
         >
           <Text
             style={[

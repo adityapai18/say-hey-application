@@ -7,18 +7,26 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:669318155909:android:ef499e21367f23b01f23ec",
+        "mobilesdk_app_id": "1:669318155909:android:a888d333434cdca71f23ec",
         "android_client_info": {
           "package_name": "com.sayhey.app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "669318155909-una5r35mjt4d9bk2mnej3c0nh6kg4vgi.apps.googleusercontent.com",
+          "client_id": "669318155909-5suac4g58fchsedrufplp9o7oq7jnrdi.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.sayhey.app",
-            "certificate_hash": "cd39f7d5d442318806b833e9b3542b8760ac7c05"
+            "certificate_hash": "b7d9ba0e00ed4743049f265a992a036cfc50b5e4"
+          }
+        },
+        {
+          "client_id": "669318155909-9go0ebquivhs2jh1un8jasgrhhto6ge5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sayhey.app",
+            "certificate_hash": "f50cde96e7e0eb94ee93ec9957c072ab33d82191"
           }
         },
         {
@@ -35,8 +43,15 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "669318155909-v812djkanngo0k6hgph2ecofe2u22t6p.apps.googleusercontent.com",
+              "client_id": "669318155909-jgn758eqr5hto0mtmifkhv906969aftm.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "669318155909-d6ojqal5ii53mroeirmjk6j75tllna5r.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.sayhey.app"
+              }
             }
           ]
         }

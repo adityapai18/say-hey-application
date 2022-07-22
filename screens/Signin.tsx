@@ -8,14 +8,15 @@ import {
   TextInput,
   Button,
   Image,
+  TouchableOpacity,
 } from "react-native";
 import { COLORS, FONTS, SHADOWS } from "../constants";
 import { useAuth } from "../lib/auth/AuthContext";
 const SignIn = ({ navigation }: any) => {
-  const user = useAuth();
+  const auth = useAuth();
   const signInAuth=(value:any)=>
   {
-    user?.signin(value.email,value.password)
+    auth?.signin(value.email,value.password)
   }
   return (
     <SafeAreaView style={styles.container}>
@@ -85,25 +86,33 @@ const SignIn = ({ navigation }: any) => {
                 or
               </Text>
               <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-evenly",
-                  marginTop: 15,
-                }}
-              >
-                <Image
-                  source={require("../assets/Facebook.png")}
-                  style={styles.logo}
-                />
-                <Image
-                  source={require("../assets/Apple.png")}
-                  style={styles.logo}
-                />
-                <Image
-                  source={require("../assets/Google.png")}
-                  style={styles.logo}
-                />
-              </View>
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-evenly",
+              marginTop: 15,
+            }}
+          >
+            <TouchableOpacity
+              onPress={() => {
+                auth?.onFacebookButtonPress();
+              }}
+            >
+              <Image
+                source={require("../assets/Facebook.png")}
+                style={styles.logo}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                auth?.onGoogleButtonPress();
+              }}
+            >
+              <Image
+                source={require("../assets/Google.png")}
+                style={styles.logo}
+              />
+            </TouchableOpacity>
+          </View>
               <Text style={{ textAlign: "center", margin: 25 }}>
                 Already have an account?{" "}
                 <Text style={{ color: "#FF7360" }}>Login</Text>
@@ -160,8 +169,8 @@ const styles = StyleSheet.create({
     boxShadow: SHADOWS.dark,
   },
   logo: {
-    width: 30,
-    height: 30,
+    width: 35,
+    height: 35,
   },
 });
 
