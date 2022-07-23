@@ -24,17 +24,22 @@ interface Schedule {
   engId: number;
   DocAmount: number;
   payment: boolean | null | undefined;
-  onPressReschedule :(((event: GestureResponderEvent) => void) & (() => void)) | undefined
-  onPressCancel :(((event: GestureResponderEvent) => void) & (() => void)) | undefined
+  canceled : boolean,
+  onPressReschedule:
+    | (((event: GestureResponderEvent) => void) & (() => void))
+    | undefined;
+  onPressCancel:
+    | (((event: GestureResponderEvent) => void) & (() => void))
+    | undefined;
   RefreshListen: () => Promise<void>;
 }
 import axios from "axios";
 import RazorpayCheckout from "react-native-razorpay";
 import { useAuth } from "../lib/auth/AuthContext";
 export const ScheduleCard = (props: Schedule) => {
-  console.log(props)
+  console.log(props);
   const date = new Date(props.dateTime);
-  console.log(date)
+  console.log(date);
   const endTime = new Date(props.end);
   const [animating, setAnimating] = useState(false);
   const [meetDet, setdate] = useState({
@@ -101,6 +106,9 @@ export const ScheduleCard = (props: Schedule) => {
       })
       .then((val) => {
         console.log(val.data);
+        setTimeout(() => {
+          props.RefreshListen();
+        }, 10000);
       });
   };
   return (
@@ -206,8 +214,11 @@ export const ScheduleCard = (props: Schedule) => {
           </TouchableOpacity>
         ) : (
           <>
-            <TouchableOpacity style={styles.button}
-            onPress={props.onPressCancel}
+            {props.canceled ? (<></>) : (
+              <>
+              <TouchableOpacity
+              style={styles.button}
+              onPress={props.onPressCancel}
             >
               <Text
                 style={[
@@ -231,6 +242,8 @@ export const ScheduleCard = (props: Schedule) => {
                 Reschedule
               </Text>
             </TouchableOpacity>
+              </>
+            )}
           </>
         )}
       </View>

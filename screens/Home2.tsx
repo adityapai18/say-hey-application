@@ -29,21 +29,30 @@ const Home2 = ({ navigation }: any) => {
   const [refreshing, setRefreshing] = React.useState(false);
   useEffect(() => {
     getDocData();
-    meetData(auth?.user.email).then((value) => {
-      var minDate = Infinity;
-      value.data.appointments.map((item: any) => {
-        const dateCom = new Date(item.engagement.timestamp);
-        const today = new Date();
-        if (dateCom.getTime() > today.getTime()) {
-          minDate = Math.min(minDate, dateCom.getTime());
+    meetData(auth?.user.email)
+      .then((value) => {
+        console.log(value);
+        var minDate = Infinity;
+        if (value.data.appointments) {
+          value.data.appointments.map((item: any) => {
+            if(item.metadata.meetingOutcome != "CANCELED"){
+              const dateCom = new Date(item.metadata.startTime);
+            const today = new Date();
+            if (dateCom.getTime() > today.getTime()) {
+              minDate = Math.min(minDate, dateCom.getTime());
+            }
+            }
+          });
+          const result = value.data.appointments.filter(
+            (item) => item.metadata.startTime === minDate 
+          );
+          setUpComingSchedule(result[0]);
         }
+        console.log(upComingSchedule);
+      })
+      .then((value) => {
+        setRefreshing(false);
       });
-      const result = value.data.appointments.filter(
-        (item) => item.engagement.timestamp === minDate
-      );
-      setUpComingSchedule(result[0]);
-      console.log(upComingSchedule);
-    });
   }, []);
   function getDocData() {
     viewAllDoc().then((value) => {
@@ -60,20 +69,21 @@ const Home2 = ({ navigation }: any) => {
       .then((value) => {
         console.log(value);
         var minDate = Infinity;
-        var result = [];
         if (value.data.appointments) {
           value.data.appointments.map((item: any) => {
-            const dateCom = new Date(item.engagement.timestamp);
+            if(item.metadata.meetingOutcome != "CANCELED"){
+              const dateCom = new Date(item.metadata.startTime);
             const today = new Date();
             if (dateCom.getTime() > today.getTime()) {
               minDate = Math.min(minDate, dateCom.getTime());
             }
+            }
           });
-          result = value.data.appointments.filter(
-            (item) => item.engagement.timestamp === minDate
+          const result = value.data.appointments.filter(
+            (item) => item.metadata.startTime === minDate 
           );
+          setUpComingSchedule(result[0]);
         }
-        setUpComingSchedule(result[0]);
         console.log(upComingSchedule);
       })
       .then((value) => {
@@ -260,9 +270,9 @@ const Home2 = ({ navigation }: any) => {
             Upcoming schedule?
           </Text>
           <TouchableOpacity
-          onPress={()=>{
-            navigation.navigate('ScheduleScreen')
-          }}
+            onPress={() => {
+              navigation.navigate("ScheduleScreen");
+            }}
           >
             <Text
               style={[
@@ -277,7 +287,7 @@ const Home2 = ({ navigation }: any) => {
         <ScheduleCardHome
           Key={upComingSchedule ? upComingSchedule.id : Math.random()}
           dateTime={
-            upComingSchedule ? upComingSchedule.engagement.timestamp : ""
+            upComingSchedule ? upComingSchedule.metadata.startTime  : ""
           }
           DocName={upComingSchedule ? upComingSchedule.docdata1.doc_name : ""}
           Qualification={

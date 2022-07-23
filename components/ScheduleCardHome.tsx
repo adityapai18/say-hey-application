@@ -15,11 +15,10 @@ interface UpcomingSchedule {
   Qualification: String;
   profile: String;
   dateTime: number;
-  Key:number
+  Key: number;
 }
 export const ScheduleCardHome = (props: UpcomingSchedule) => {
   console.log(props);
-  const [date, setdate] = useState(props.dateTime);
   return (
     <View style={styles.ScheduleCard} key={props.Key}>
       <Text
@@ -40,8 +39,14 @@ export const ScheduleCardHome = (props: UpcomingSchedule) => {
         {"     "}
         {props.dateTime
           ? new Date(props.dateTime).getHours() > 12
-            ? new Date(props.dateTime).getHours() + " PM"
-            : new Date(props.dateTime).getHours() + " AM"
+            ? new Date(props.dateTime).getHours() +
+              ":" +
+              new Date(props.dateTime).getMinutes() +
+              " PM"
+            : new Date(props.dateTime).getHours() +
+              ":" +
+              new Date(props.dateTime).getMinutes() +
+              " AM"
           : ""}
       </Text>
       <View style={styles.checkupButton}>
@@ -96,6 +101,7 @@ export const ScheduleCardHome = (props: UpcomingSchedule) => {
                 fontSize: 12,
                 fontWeight: "400",
                 color: "#F5F8FA",
+                width: props.Qualification.length > 50 ? '30%':'100%'
               },
             ]}
           >
@@ -124,7 +130,7 @@ export const ScheduleCardHome = (props: UpcomingSchedule) => {
 };
 const styles = StyleSheet.create({
   ScheduleCard: {
-    height: 203,
+    flex:1,
     backgroundColor: "#054A80",
     borderRadius: 16,
     marginTop: 16,

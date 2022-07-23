@@ -23,12 +23,16 @@ import WebView from "react-native-webview";
 const ScheduleScreen = ({ navigation }: any) => {
   const auth = useAuth();
   const url = /\bhttps?:\/\/\S+?ms=1/gi;
-  const [docData, setdocData] = useState();
+  // const [docData, setdocData] = useState();
+  const [canceledMeets, setcanceledMeets] = useState();
+  const [upcomingMeets, setupcomingMeets] = useState();
+  const [completeMeets, setcompleteMeets] = useState();
   const [refreshing, setRefreshing] = React.useState(false);
   const [visible, setvisible] = useState(false);
   const [modalUrl, setmodalUrl] = useState("");
   const showModal = () => setvisible(true);
   const hideModal = () => setvisible(false);
+
   const presetSection = {
     upcoming: false,
     complete: false,
@@ -40,9 +44,28 @@ const ScheduleScreen = ({ navigation }: any) => {
     cancel: false,
   });
   useEffect(() => {
-    setRefreshing(true)
+    setRefreshing(true);
     meetData(auth?.user.email).then((value) => {
-      setdocData(value.data.appointments);
+      // setdocData(value.data.appointments);
+      if (value.data.appointments) {
+        const canceledData = value.data.appointments.filter(
+          (item) => item.metadata.meetingOutcome === "CANCELED"
+        );
+        setcanceledMeets(canceledData);
+        const now = new Date();
+        const upcomingData = value.data.appointments.filter(
+          (item) =>
+            item.metadata.meetingOutcome != "CANCELED" &&
+            item.metadata.endTime > now.getTime()
+        );
+        setupcomingMeets(upcomingData);
+        const completeData = value.data.appointments.filter(
+          (item) =>
+            item.metadata.meetingOutcome != "CANCELED" &&
+            item.metadata.endTime < now.getTime()
+        );
+        setcompleteMeets(completeData);
+      }
       setRefreshing(false);
     });
   }, []);
@@ -62,29 +85,43 @@ const ScheduleScreen = ({ navigation }: any) => {
   };
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
-    meetData(auth?.user.email)
-      .then((value) => {
-        setdocData(value.data.appointments);
-        setRefreshing(false);
-      })
-      .catch((err)=>{
-        alert(err)
-        setRefreshing(false);
-      })
+    meetData(auth?.user.email).then((value) => {
+      // setdocData(value.data.appointments);
+      if (value.data.appointments) {
+        const canceledData = value.data.appointments.filter(
+          (item) => item.metadata.meetingOutcome === "CANCELED"
+        );
+        setcanceledMeets(canceledData);
+        const now = new Date();
+        const upcomingData = value.data.appointments.filter(
+          (item) =>
+            item.metadata.meetingOutcome != "CANCELED" &&
+            item.metadata.endTime > now.getTime()
+        );
+        setupcomingMeets(upcomingData);
+        const completeData = value.data.appointments.filter(
+          (item) =>
+            item.metadata.meetingOutcome != "CANCELED" &&
+            item.metadata.endTime < now.getTime()
+        );
+        setcompleteMeets(completeData);
+      }
+      setRefreshing(false);
+    });
   }, [refreshing]);
   return (
     <SafeAreaView style={styles.container}>
       <ActivityIndicator
-          animating={refreshing}
-          size="large"
-          style={{
-            position: "absolute",
-            top:'50%',
-            left:'50%',
-            zIndex: 1,
-          }}
-          color="#0A94FF"
-        />
+        animating={refreshing}
+        size="large"
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          zIndex: 1,
+        }}
+        color="#0A94FF"
+      />
       <View style={{ flexDirection: "row" }}>
         <TouchableOpacity
           style={[
@@ -93,6 +130,7 @@ const ScheduleScreen = ({ navigation }: any) => {
           ]}
           onPress={() => {
             setsection({ ...presetSection, upcoming: true });
+            onRefresh();
           }}
         >
           <Text
@@ -111,6 +149,7 @@ const ScheduleScreen = ({ navigation }: any) => {
           ]}
           onPress={() => {
             setsection({ ...presetSection, complete: true });
+            onRefresh();
           }}
         >
           <Text
@@ -129,12 +168,13 @@ const ScheduleScreen = ({ navigation }: any) => {
           ]}
           onPress={() => {
             setsection({ ...presetSection, cancel: true });
+            onRefresh();
           }}
         >
           <Text
             style={[styles.text, { color: section.cancel ? "white" : "black" }]}
           >
-            Cancel
+            Canceled
           </Text>
         </TouchableOpacity>
       </View>
@@ -144,8 +184,9 @@ const ScheduleScreen = ({ navigation }: any) => {
         //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         // }
       >
-        {docData &&
-          docData.map((item, index) => {
+        {section.cancel &&
+          canceledMeets &&
+          canceledMeets.map((item, index) => {
             if (item.docdata1) {
               console.log(item);
               return (
@@ -160,6 +201,63 @@ const ScheduleScreen = ({ navigation }: any) => {
                   engId={item.engagement.id}
                   payment={item.payment}
                   RefreshListen={onRefresh}
+                  canceled={true}
+                  onPressCancel={() => {
+                    cancelHandler(item.engagement.bodyPreview);
+                  }}
+                  onPressReschedule={() => {
+                    rescheduleHandler(item.engagement.bodyPreview);
+                  }}
+                />
+              );
+            }
+          })}
+        {section.upcoming &&
+          upcomingMeets &&
+          upcomingMeets.map((item, index) => {
+            if (item.docdata1) {
+              console.log(item);
+              return (
+                <ScheduleCard
+                  key={item.engagement.id}
+                  Qualification={item.docdata1.qualification}
+                  DocName={item.docdata1.doc_name}
+                  profile={item.docdata1.prof_pic}
+                  dateTime={item.metadata.startTime}
+                  end={item.metadata.endTime}
+                  DocAmount={item.docdata1.price}
+                  engId={item.engagement.id}
+                  payment={item.payment}
+                  canceled={false}
+                  RefreshListen={onRefresh}
+                  onPressCancel={() => {
+                    cancelHandler(item.engagement.bodyPreview);
+                  }}
+                  onPressReschedule={() => {
+                    rescheduleHandler(item.engagement.bodyPreview);
+                  }}
+                />
+              );
+            }
+          })}
+        {section.complete &&
+          completeMeets &&
+          completeMeets.map((item, index) => {
+            if (item.docdata1) {
+              console.log(item);
+              return (
+                <ScheduleCard
+                  key={item.engagement.id}
+                  Qualification={item.docdata1.qualification}
+                  DocName={item.docdata1.doc_name}
+                  profile={item.docdata1.prof_pic}
+                  dateTime={item.metadata.startTime}
+                  end={item.metadata.endTime}
+                  DocAmount={item.docdata1.price}
+                  engId={item.engagement.id}
+                  payment={item.payment}
+                  RefreshListen={onRefresh}
+                  canceled={false}
                   onPressCancel={() => {
                     cancelHandler(item.engagement.bodyPreview);
                   }}
