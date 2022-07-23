@@ -17,7 +17,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 interface Schedule {
   DocName: String;
   Qualification: String;
-  profile: String;
+  profile: string;
   dateTime: number;
   end: number;
   key: any;

@@ -10,9 +10,11 @@ import {
   RefreshControl,
   Alert,
   StatusBar,
+  Linking,
 } from "react-native";
 import SearchBar from "../components/SearchBar";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { AntDesign } from '@expo/vector-icons'; 
 import CarouselCard from "../components/CarouselCards";
 import { COLORS, FONTS, SHADOWS } from "../constants";
 import { ScheduleCardHome } from "../components/ScheduleCardHome";
@@ -451,6 +453,22 @@ const Home2 = ({ navigation }: any) => {
             Account
           </Text>
         </TouchableOpacity>
+        {/* <TouchableOpacity
+          style={{ justifyContent: "center", alignItems: "center" }}
+          onPress={() => {
+            Linking.openURL(`tel:${'+91 9082588340'}`)
+          }}
+        >
+          <AntDesign name="customerservice" size={24} color="rgba(169, 169, 169, 1)" />
+          <Text
+            style={[
+              styles.text,
+              { fontSize: 14, fontWeight: "400", color: "#A9A9A9" },
+            ]}
+          >
+            Support
+          </Text>
+        </TouchableOpacity> */}
       </View>
     </ScrollView>
   );

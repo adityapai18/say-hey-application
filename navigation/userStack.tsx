@@ -20,7 +20,7 @@ const Stack = createStackNavigator();
 
 export default function UserStack() {
   return (
-    <PaperProvider>
+    <PaperProvider >
         <Stack.Navigator>
           <Stack.Screen
             name="Home"
