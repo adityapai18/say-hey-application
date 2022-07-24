@@ -16,6 +16,7 @@ import { CustomMenu } from "../components/CustomMenu";
 import EditProfile from "../screens/EditProfile"
 import { FONTS } from "../constants";
 import { Provider as PaperProvider } from "react-native-paper";
+import ViewAllDocs from "../screens/ViewAllDocs";
 const Stack = createStackNavigator();
 
 export default function UserStack() {
@@ -173,7 +174,20 @@ export default function UserStack() {
               },
             }}
           />
-          
+          <Stack.Screen
+            name="ViewAllDocs"
+            component={ViewAllDocs}
+            options={{
+              title: "Our Doctors",
+              headerTitleAlign: "center",
+              headerTitleStyle: {
+                fontFamily: FONTS.regular,
+                fontWeight: "700",
+                color: "#404446",
+                fontSize: 18,
+              },
+            }}
+          />
         </Stack.Navigator>
     </PaperProvider>
   );
