@@ -135,10 +135,6 @@ const NotificationScreen = ({ navigation }: any) => {
           <DocNotifications />
         </View>
       </ScrollView>
-      <Button
-        title="Press to Send Notification"
-        onPress={recieveToken}
-      />
     </SafeAreaView>
   );
 };

@@ -17,22 +17,29 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 interface Schedule {
   DocName: String;
   Qualification: String;
-  profile: String;
+  profile: string;
   dateTime: number;
   end: number;
   key: any;
   engId: number;
   DocAmount: number;
   payment: boolean | null | undefined;
-  onPressReschedule :(((event: GestureResponderEvent) => void) & (() => void)) | undefined
-  onPressCancel :(((event: GestureResponderEvent) => void) & (() => void)) | undefined
-
+  canceled : boolean,
+  onPressReschedule:
+    | (((event: GestureResponderEvent) => void) & (() => void))
+    | undefined;
+  onPressCancel:
+    | (((event: GestureResponderEvent) => void) & (() => void))
+    | undefined;
+  RefreshListen: () => Promise<void>;
 }
 import axios from "axios";
 import RazorpayCheckout from "react-native-razorpay";
 import { useAuth } from "../lib/auth/AuthContext";
 export const ScheduleCard = (props: Schedule) => {
+  console.log(props);
   const date = new Date(props.dateTime);
+  console.log(date);
   const endTime = new Date(props.end);
   const [animating, setAnimating] = useState(false);
   const [meetDet, setdate] = useState({
@@ -42,7 +49,6 @@ export const ScheduleCard = (props: Schedule) => {
   });
   const auth = useAuth();
   const CreateOrder = () => {
-    setAnimating(true);
     axios
       .post("https://shielded-caverns-63372.herokuapp.com/api/payment/order", {
         user_id: auth?.user.uid,
@@ -52,7 +58,7 @@ export const ScheduleCard = (props: Schedule) => {
         reciept: "abnxcksnbcs2324",
       })
       .then((val) => {
-        console.log(val.data.order.id);
+        console.log(val.data.order);
         RazorPayment(props.DocName, val.data.amount, val.data.order.id);
       });
   };
@@ -100,6 +106,9 @@ export const ScheduleCard = (props: Schedule) => {
       })
       .then((val) => {
         console.log(val.data);
+        setTimeout(() => {
+          props.RefreshListen();
+        }, 10000);
       });
   };
   return (
@@ -205,8 +214,11 @@ export const ScheduleCard = (props: Schedule) => {
           </TouchableOpacity>
         ) : (
           <>
-            <TouchableOpacity style={styles.button}
-            onPress={props.onPressCancel}
+            {props.canceled ? (<></>) : (
+              <>
+              <TouchableOpacity
+              style={styles.button}
+              onPress={props.onPressCancel}
             >
               <Text
                 style={[
@@ -230,6 +242,8 @@ export const ScheduleCard = (props: Schedule) => {
                 Reschedule
               </Text>
             </TouchableOpacity>
+              </>
+            )}
           </>
         )}
       </View>

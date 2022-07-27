@@ -58,8 +58,8 @@ function useProvideAuth() {
             displayName: firstName + " " + lastName,
           })
           .then(() => {
-            setUser(auth().currentUser);
-            addUser(response, password);
+            // setUser(auth().currentUser);
+            addUser(password);
             return response;
           })
           .catch((error: any) => {
@@ -78,12 +78,19 @@ function useProvideAuth() {
         setUser(undefined);
       });
   };
-  const addUser = (tokenData: any, password: string) => {
-    console.log(tokenData);
-    console.log(tokenData.user);
+  const addUser = (password: string) => {
+    console.log(auth().currentUser);
+    const reqUser = auth().currentUser;
+    auth().currentUser?.getIdToken().then((val)=>{
     axios
+    // https://shielded-caverns-63372.herokuapp.com/api/user
       .post("https://shielded-caverns-63372.herokuapp.com/api/user", {
-        ...tokenData.user,
+        email:reqUser?.email,
+        mno:reqUser?.phoneNumber,
+        profile:reqUser?.photoURL,
+        displayName:reqUser?.displayName,
+        uid:reqUser?.uid,
+        accessToken:val,
         password,
       })
       .then((response) => {
@@ -92,6 +99,7 @@ function useProvideAuth() {
       .catch((error) => {
         console.log(error.message);
       });
+    });
   };
   const updateProfilePic = (photourl: string) => {
     auth()
@@ -119,6 +127,7 @@ function useProvideAuth() {
       authuser.then((value) => {
         console.log(value);
         setUser(value.user);
+        addUser('oAuthType')
       });
     } catch (error) {
       console.log(error);
@@ -153,6 +162,7 @@ function useProvideAuth() {
     authuser.then((value) => {
       console.log(value);
       setUser(value.user);
+      addUser('oAuthType')
     });
   };
   //   const sendPasswordResetEmail = (email) => {

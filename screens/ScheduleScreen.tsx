@@ -11,6 +11,8 @@ import {
   RefreshControl,
   TouchableOpacity,
   Modal,
+  ActivityIndicator,
+  Dimensions,
 } from "react-native";
 import { ScheduleCard } from "../components/ScheduleCard";
 import { meetData } from "../lib/api/Connection";
@@ -20,114 +22,280 @@ import WebView from "react-native-webview";
 
 const ScheduleScreen = ({ navigation }: any) => {
   const auth = useAuth();
-  const url= /\bhttps?:\/\/\S+?ms=1/gi;
-  const [docData, setdocData] = useState();
+  const url = /\bhttps?:\/\/\S+?ms=1/gi;
+  // const [docData, setdocData] = useState();
+  const [canceledMeets, setcanceledMeets] = useState();
+  const [upcomingMeets, setupcomingMeets] = useState();
+  const [completeMeets, setcompleteMeets] = useState();
   const [refreshing, setRefreshing] = React.useState(false);
   const [visible, setvisible] = useState(false);
-  const [modalUrl, setmodalUrl] = useState('');
+  const [modalUrl, setmodalUrl] = useState("");
   const showModal = () => setvisible(true);
   const hideModal = () => setvisible(false);
+
+  const presetSection = {
+    upcoming: false,
+    complete: false,
+    cancel: false,
+  };
+  const [section, setsection] = useState({
+    upcoming: true,
+    complete: false,
+    cancel: false,
+  });
   useEffect(() => {
+    setRefreshing(true);
     meetData(auth?.user.email).then((value) => {
-      setdocData(value.data.appointments);
+      // setdocData(value.data.appointments);
+      if (value.data.appointments) {
+        const canceledData = value.data.appointments.filter(
+          (item) => item.metadata.meetingOutcome === "CANCELED"
+        );
+        setcanceledMeets(canceledData);
+        const now = new Date();
+        const upcomingData = value.data.appointments.filter(
+          (item) =>
+            item.metadata.meetingOutcome != "CANCELED" &&
+            item.metadata.endTime > now.getTime()
+        );
+        setupcomingMeets(upcomingData);
+        const completeData = value.data.appointments.filter(
+          (item) =>
+            item.metadata.meetingOutcome != "CANCELED" &&
+            item.metadata.endTime < now.getTime()
+        );
+        setcompleteMeets(completeData);
+      }
+      setRefreshing(false);
     });
   }, []);
-  const cancelHandler = (item:string)=>{
+  const cancelHandler = (item: string) => {
     const arr = item.match(url);
-    if(arr[1]){
+    if (arr[1]) {
       setmodalUrl(arr[1]);
       showModal();
     }
-  }
-  const rescheduleHandler = (item:string)=>{
+  };
+  const rescheduleHandler = (item: string) => {
     const arr = item.match(url);
-    if(arr[0]){
+    if (arr[0]) {
       setmodalUrl(arr[0]);
       showModal();
     }
-  }
+  };
   const onRefresh = React.useCallback(async () => {
     setRefreshing(true);
-    meetData(auth?.user.email)
-      .then((value) => {
-        setdocData(value.data.appointments);
-      })
-      .then((value) => {
-        setRefreshing(false);
-      });
+    meetData(auth?.user.email).then((value) => {
+      // setdocData(value.data.appointments);
+      if (value.data.appointments) {
+        const canceledData = value.data.appointments.filter(
+          (item) => item.metadata.meetingOutcome === "CANCELED"
+        );
+        setcanceledMeets(canceledData);
+        const now = new Date();
+        const upcomingData = value.data.appointments.filter(
+          (item) =>
+            item.metadata.meetingOutcome != "CANCELED" &&
+            item.metadata.endTime > now.getTime()
+        );
+        setupcomingMeets(upcomingData);
+        const completeData = value.data.appointments.filter(
+          (item) =>
+            item.metadata.meetingOutcome != "CANCELED" &&
+            item.metadata.endTime < now.getTime()
+        );
+        setcompleteMeets(completeData);
+      }
+      setRefreshing(false);
+    });
   }, [refreshing]);
   return (
     <SafeAreaView style={styles.container}>
+      <ActivityIndicator
+        animating={refreshing}
+        size="large"
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          zIndex: 1,
+        }}
+        color="#0A94FF"
+      />
       <View style={{ flexDirection: "row" }}>
-        <View style={[styles.appoinmentType, { backgroundColor: "#0A94FF" }]}>
-          <Text style={[styles.text, { color: "white" }]}>Upcoming</Text>
-        </View>
-        <View style={styles.appoinmentType}>
-          <Text style={[styles.text, { color: "#A4AEBC" }]}>Complete</Text>
-        </View>
-        <View style={styles.appoinmentType}>
-          <Text style={[styles.text, { color: "#A4AEBC" }]}>Cancel</Text>
-        </View>
+        <TouchableOpacity
+          style={[
+            styles.appoinmentType,
+            { backgroundColor: section.upcoming ? "#0A94FF" : COLORS.offWhite },
+          ]}
+          onPress={() => {
+            setsection({ ...presetSection, upcoming: true });
+            onRefresh();
+          }}
+        >
+          <Text
+            style={[
+              styles.text,
+              { color: section.upcoming ? "white" : "black" },
+            ]}
+          >
+            Upcoming
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[
+            styles.appoinmentType,
+            { backgroundColor: section.complete ? "#0A94FF" : COLORS.offWhite },
+          ]}
+          onPress={() => {
+            setsection({ ...presetSection, complete: true });
+            onRefresh();
+          }}
+        >
+          <Text
+            style={[
+              styles.text,
+              { color: section.complete ? "white" : "black" },
+            ]}
+          >
+            Complete
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[
+            styles.appoinmentType,
+            { backgroundColor: section.cancel ? "#0A94FF" : COLORS.offWhite },
+          ]}
+          onPress={() => {
+            setsection({ ...presetSection, cancel: true });
+            onRefresh();
+          }}
+        >
+          <Text
+            style={[styles.text, { color: section.cancel ? "white" : "black" }]}
+          >
+            Canceled
+          </Text>
+        </TouchableOpacity>
       </View>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
+        // refreshControl={
+        //   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        // }
       >
-        {docData &&
-          docData.map((item,index) => {
+        {section.cancel &&
+          canceledMeets &&
+          canceledMeets.map((item, index) => {
             if (item.docdata1) {
-              console.log(item)
+              console.log(item);
               return (
                 <ScheduleCard
                   key={item.engagement.id}
                   Qualification={item.docdata1.qualification}
                   DocName={item.docdata1.doc_name}
                   profile={item.docdata1.prof_pic}
-                  dateTime={item.engagement.timestamp}
+                  dateTime={item.metadata.startTime}
                   end={item.metadata.endTime}
                   DocAmount={item.docdata1.price}
                   engId={item.engagement.id}
                   payment={item.payment}
-                  onPressCancel={()=>{
-                    cancelHandler(item.engagement.bodyPreview)
+                  RefreshListen={onRefresh}
+                  canceled={true}
+                  onPressCancel={() => {
+                    cancelHandler(item.engagement.bodyPreview);
                   }}
-                  onPressReschedule={()=>{
-                    rescheduleHandler(item.engagement.bodyPreview)
+                  onPressReschedule={() => {
+                    rescheduleHandler(item.engagement.bodyPreview);
+                  }}
+                />
+              );
+            }
+          })}
+        {section.upcoming &&
+          upcomingMeets &&
+          upcomingMeets.map((item, index) => {
+            if (item.docdata1) {
+              console.log(item);
+              return (
+                <ScheduleCard
+                  key={item.engagement.id}
+                  Qualification={item.docdata1.qualification}
+                  DocName={item.docdata1.doc_name}
+                  profile={item.docdata1.prof_pic}
+                  dateTime={item.metadata.startTime}
+                  end={item.metadata.endTime}
+                  DocAmount={item.docdata1.price}
+                  engId={item.engagement.id}
+                  payment={item.payment}
+                  canceled={false}
+                  RefreshListen={onRefresh}
+                  onPressCancel={() => {
+                    cancelHandler(item.engagement.bodyPreview);
+                  }}
+                  onPressReschedule={() => {
+                    rescheduleHandler(item.engagement.bodyPreview);
+                  }}
+                />
+              );
+            }
+          })}
+        {section.complete &&
+          completeMeets &&
+          completeMeets.map((item, index) => {
+            if (item.docdata1) {
+              console.log(item);
+              return (
+                <ScheduleCard
+                  key={item.engagement.id}
+                  Qualification={item.docdata1.qualification}
+                  DocName={item.docdata1.doc_name}
+                  profile={item.docdata1.prof_pic}
+                  dateTime={item.metadata.startTime}
+                  end={item.metadata.endTime}
+                  DocAmount={item.docdata1.price}
+                  engId={item.engagement.id}
+                  payment={item.payment}
+                  RefreshListen={onRefresh}
+                  canceled={false}
+                  onPressCancel={() => {
+                    cancelHandler(item.engagement.bodyPreview);
+                  }}
+                  onPressReschedule={() => {
+                    rescheduleHandler(item.engagement.bodyPreview);
                   }}
                 />
               );
             }
           })}
         <Modal visible={visible} onDismiss={hideModal}>
-            <View style={{ flex: 1 }}>
-              <WebView
-                source={{ uri: modalUrl }}
-                originWhitelist={["*"]}
-                scrollEnabled={false}
-                startInLoadingState={true}
-              />
-            </View>
-            <TouchableOpacity
-                activeOpacity={0.8}
-                onPress={hideModal}
-                style={styles.btn}
-              >
-                <Text
-                  style={[
-                    {
-                      fontWeight: "bold",
-                      fontSize: 15,
-                      color: "white",
-                    },
-                    styles.text,
-                  ]}
-                >
-                  CLOSE
-                </Text>
-              </TouchableOpacity>
-          </Modal>
+          <View style={{ flex: 1 }}>
+            <WebView
+              source={{ uri: modalUrl }}
+              originWhitelist={["*"]}
+              scrollEnabled={false}
+              startInLoadingState={true}
+            />
+          </View>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={hideModal}
+            style={styles.btn}
+          >
+            <Text
+              style={[
+                {
+                  fontWeight: "bold",
+                  fontSize: 15,
+                  color: "white",
+                },
+                styles.text,
+              ]}
+            >
+              CLOSE
+            </Text>
+          </TouchableOpacity>
+        </Modal>
       </ScrollView>
     </SafeAreaView>
   );
@@ -162,8 +330,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#0A94FF",
     justifyContent: "center",
     alignItems: "center",
-    alignSelf:"center",
-    padding:'3%'
+    alignSelf: "center",
+    padding: "3%",
   },
 });
 

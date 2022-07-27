@@ -78,6 +78,6 @@ const styles = StyleSheet.create({
   input: {
     fontSize: 15,
     marginLeft: 15,
-
+    width:'100%'
   },
 });

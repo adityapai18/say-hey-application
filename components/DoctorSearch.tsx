@@ -1,34 +1,24 @@
-import { Text } from "@rneui/themed";
-import React, { useState } from "react";
-import {
-  SafeAreaView,
-  View,
-  StyleSheet,
-  TextInput,
-  Image,
-  TouchableOpacity,
-  ScrollView,
-  ImageBackground,
-  GestureResponderEvent,
-} from "react-native";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { COLORS, FONTS, SHADOWS } from "../constants";
+import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native'
+import React from 'react'
+import { Ionicons } from '@expo/vector-icons'
+import { FONTS } from '../constants'
 interface doctorCard{
-  DocName : String,
-  Qualification : String,
-  profile:string,
-  Rating: Number,
-  onPress: any,
-  width:number
-} 
-export const DoctorReviewCard = (props:doctorCard) => {
+    DocName : String,
+    Qualification : String,
+    profile:string,
+    Rating: Number,
+    onPress: any,
+    width:number,
+    key:any,
+  } 
+const DoctorSearch = (props:doctorCard) => {
   return (
-    <TouchableOpacity style={[styles.container]} 
+    <TouchableOpacity style={[styles.container]} key={props.key} 
     onPress={props.onPress}
     >
       <View style={{ height: 185, borderRadius: 12, alignSelf: "center" }}>
         <Image
-          style={{height:190,width:193}}
+          style={{height:190,width:140}}
           source={{uri:props.profile}}
           resizeMode="contain"
         ></Image>
@@ -56,7 +46,7 @@ export const DoctorReviewCard = (props:doctorCard) => {
       <Text
         style={[
           styles.text,
-          { fontSize: 18, fontWeight: "800", marginTop: 10 },
+          { fontSize: 15, fontWeight: "800", marginTop: 10 },
         ]}
       >
         {props.DocName}
@@ -64,33 +54,35 @@ export const DoctorReviewCard = (props:doctorCard) => {
       <Text
         style={[
           styles.text,
-          { fontSize: 12, fontWeight: "300"},
+          { fontSize: 10, fontWeight: "300", color:'grey'},
         ]}
       >
         {props.Qualification}
       </Text>
     </TouchableOpacity>
-  );
-};
+  )
+}
+
+export default DoctorSearch
+
 const styles = StyleSheet.create({
-  container: {
-    marginTop: 19,
-    marginRight: 20,
-    flex:1,
-    width: 209,
-    borderRadius: 16,
-    backgroundColor: "#FFFFFF",
-    padding: 10,
-  },
-  text: {
-    fontFamily: FONTS.regular,
-  },
-  starView: {
-    right: 0,
-    top: 0,
-    position: "absolute",
-    margin: 8,
-    backgroundColor: "white",
-    borderRadius: 8,
-  },
-});
+    container: {
+      marginTop: 19,
+      width: 150,
+      borderRadius: 16,
+      backgroundColor: "#FFFFFF",
+      padding: 10,
+      paddingTop:0
+    },
+    text: {
+      fontFamily: FONTS.regular,
+    },
+    starView: {
+      right: 0,
+      top: 10,
+      position: "absolute",
+      margin: 8,
+      backgroundColor: "white",
+      borderRadius: 8,
+    },
+  });

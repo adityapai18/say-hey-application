@@ -10,9 +10,15 @@ import {
   RefreshControl,
   Alert,
   StatusBar,
+  Linking,
 } from "react-native";
 import SearchBar from "../components/SearchBar";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import {
+  AntDesign,
+  Fontisto,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 import CarouselCard from "../components/CarouselCards";
 import { COLORS, FONTS, SHADOWS } from "../constants";
 import { ScheduleCardHome } from "../components/ScheduleCardHome";
@@ -29,21 +35,30 @@ const Home2 = ({ navigation }: any) => {
   const [refreshing, setRefreshing] = React.useState(false);
   useEffect(() => {
     getDocData();
-    meetData(auth?.user.email).then((value) => {
-      var minDate = Infinity;
-      value.data.appointments.map((item: any) => {
-        const dateCom = new Date(item.engagement.timestamp);
-        const today = new Date();
-        if (dateCom.getTime() > today.getTime()) {
-          minDate = Math.min(minDate, dateCom.getTime());
+    meetData(auth?.user.email)
+      .then((value) => {
+        console.log(value);
+        var minDate = Infinity;
+        if (value.data.appointments) {
+          value.data.appointments.map((item: any) => {
+            if (item.metadata.meetingOutcome != "CANCELED") {
+              const dateCom = new Date(item.metadata.startTime);
+              const today = new Date();
+              if (dateCom.getTime() > today.getTime()) {
+                minDate = Math.min(minDate, dateCom.getTime());
+              }
+            }
+          });
+          const result = value.data.appointments.filter(
+            (item) => item.metadata.startTime === minDate
+          );
+          setUpComingSchedule(result[0]);
         }
+        console.log(upComingSchedule);
+      })
+      .then((value) => {
+        setRefreshing(false);
       });
-      const result = value.data.appointments.filter(
-        (item) => item.engagement.timestamp === minDate
-      );
-      setUpComingSchedule(result[0]);
-      console.log(upComingSchedule);
-    });
   }, []);
   function getDocData() {
     viewAllDoc().then((value) => {
@@ -60,20 +75,21 @@ const Home2 = ({ navigation }: any) => {
       .then((value) => {
         console.log(value);
         var minDate = Infinity;
-        var result = [];
         if (value.data.appointments) {
           value.data.appointments.map((item: any) => {
-            const dateCom = new Date(item.engagement.timestamp);
-            const today = new Date();
-            if (dateCom.getTime() > today.getTime()) {
-              minDate = Math.min(minDate, dateCom.getTime());
+            if (item.metadata.meetingOutcome != "CANCELED") {
+              const dateCom = new Date(item.metadata.startTime);
+              const today = new Date();
+              if (dateCom.getTime() > today.getTime()) {
+                minDate = Math.min(minDate, dateCom.getTime());
+              }
             }
           });
-          result = value.data.appointments.filter(
-            (item) => item.engagement.timestamp === minDate
+          const result = value.data.appointments.filter(
+            (item) => item.metadata.startTime === minDate
           );
+          setUpComingSchedule(result[0]);
         }
-        setUpComingSchedule(result[0]);
         console.log(upComingSchedule);
       })
       .then((value) => {
@@ -81,59 +97,60 @@ const Home2 = ({ navigation }: any) => {
       });
   }, [refreshing]);
   return (
-    <ScrollView
-      showsVerticalScrollIndicator={false}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }
-    >
-      <StatusBar
-        animated={true}
-        backgroundColor="#F5F8FA"
-        barStyle={"dark-content"}
-      />
-      <SafeAreaView style={styles.container}>
-        <View
-          style={{
-            marginTop: 20,
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <View>
-            <Text style={[styles.text, { fontSize: 12, fontWeight: "400" }]}>
-              WELCOME TO 👋
-            </Text>
-            <Text
-              style={[
-                styles.text,
-                {
-                  fontSize: 28,
-                  fontWeight: "800",
-                  letterSpacing: 2,
-                  color: "#0A94FF",
-                },
-              ]}
-            >
-              SayHey
-            </Text>
-          </View>
-          <TouchableOpacity
-            style={{ backgroundColor: "white", borderRadius: 12 }}
-            onPress={() => {
-              navigation.navigate("NotificationScreen");
+    <>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
+        <StatusBar
+          animated={true}
+          backgroundColor="#F5F8FA"
+          barStyle={"dark-content"}
+        />
+        <SafeAreaView style={styles.container}>
+          <View
+            style={{
+              marginTop: 20,
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
             }}
           >
-            <Ionicons
-              name="notifications-outline"
-              size={30}
-              color="black"
-              style={{ margin: 10 }}
-            />
-          </TouchableOpacity>
-        </View>
-        <View
+            <View>
+              <Text style={[styles.text, { fontSize: 12, fontWeight: "400" }]}>
+                WELCOME TO 👋
+              </Text>
+              <Text
+                style={[
+                  styles.text,
+                  {
+                    fontSize: 28,
+                    fontWeight: "800",
+                    letterSpacing: 2,
+                    color: "#0A94FF",
+                  },
+                ]}
+              >
+                SayHey
+              </Text>
+            </View>
+            <TouchableOpacity
+              style={{ backgroundColor: "white", borderRadius: 12 }}
+              onPress={() => {
+                navigation.navigate("NotificationScreen");
+              }}
+            >
+              <Ionicons
+                name="notifications-outline"
+                size={30}
+                color="black"
+                style={{ margin: 10 }}
+              />
+            </TouchableOpacity>
+          </View>
+          {/* <View
           style={{ flexDirection: "row", marginTop: 20, alignItems: "center" }}
         >
           <SearchBar
@@ -153,139 +170,141 @@ const Home2 = ({ navigation }: any) => {
               style={{ margin: 10 }}
             />
           </TouchableOpacity>
-        </View>
-        <View
-          style={{
-            marginTop: 25,
-            justifyContent: "center",
-            flex: 1,
-            alignContent: "center",
-          }}
-        >
-          <CarouselCard />
-        </View>
-        <Text
-          style={[
-            styles.text,
-            { fontSize: 18, fontWeight: "800", letterSpacing: 0.75 },
-          ]}
-        >
-          How are you feeling today?
-        </Text>
-        <View style={{ flexDirection: "row", justifyContent: "space-evenly" }}>
-          <TouchableOpacity
-            onPress={() => {
-              Alert.alert(
-                "Mood Alert",
-                "We are happy for you! Keep having a good day.",
-                [
-                  {
-                    text: "Cancel",
-                    onPress: () => console.log("Cancel Pressed"),
-                    style: "cancel",
-                  },
-                  { text: "OK", onPress: () => console.log("OK Pressed") },
-                ]
-              );
+        </View> */}
+          <View
+            style={{
+              marginTop: 25,
+              justifyContent: "center",
+              flex: 1,
+              alignContent: "center",
             }}
           >
-            <Image source={require("../assets/mood1.png")}></Image>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              Alert.alert(
-                "Mood Alert",
-                "It's about how you end the day. Have a good day ahead",
-                [
-                  {
-                    text: "Cancel",
-                    onPress: () => console.log("Cancel Pressed"),
-                    style: "cancel",
-                  },
-                  { text: "OK", onPress: () => console.log("OK Pressed") },
-                ]
-              );
-            }}
-          >
-            <Image source={require("../assets/mood2.png")}></Image>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              Alert.alert("Mood Alert", "We are always here for you.", [
-                {
-                  text: "Cancel",
-                  onPress: () => console.log("Cancel Pressed"),
-                  style: "cancel",
-                },
-                { text: "OK", onPress: () => console.log("OK Pressed") },
-              ]);
-            }}
-          >
-            <Image source={require("../assets/mood3.png")}></Image>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              Alert.alert(
-                "Mood Alert",
-                "It can happen to anyone. Keep calm and be happy.",
-                [
-                  {
-                    text: "Cancel",
-                    onPress: () => console.log("Cancel Pressed"),
-                    style: "cancel",
-                  },
-                  { text: "OK", onPress: () => console.log("OK Pressed") },
-                ]
-              );
-            }}
-          >
-            <Image source={require("../assets/mood4.png")}></Image>
-          </TouchableOpacity>
-        </View>
-
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginTop: 20,
-          }}
-        >
+            <CarouselCard />
+          </View>
           <Text
             style={[
               styles.text,
               { fontSize: 18, fontWeight: "800", letterSpacing: 0.75 },
             ]}
           >
-            Upcoming schedule?
+            How are you feeling today?
           </Text>
-          <TouchableOpacity
-          onPress={()=>{
-            navigation.navigate('ScheduleScreen')
-          }}
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-evenly" }}
+          >
+            <TouchableOpacity
+              onPress={() => {
+                Alert.alert(
+                  "Mood Alert",
+                  "We are happy for you! Keep having a good day.",
+                  [
+                    {
+                      text: "Cancel",
+                      onPress: () => console.log("Cancel Pressed"),
+                      style: "cancel",
+                    },
+                    { text: "OK", onPress: () => console.log("OK Pressed") },
+                  ]
+                );
+              }}
+            >
+              <Image source={require("../assets/mood1.png")}></Image>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                Alert.alert(
+                  "Mood Alert",
+                  "It's about how you end the day. Have a good day ahead",
+                  [
+                    {
+                      text: "Cancel",
+                      onPress: () => console.log("Cancel Pressed"),
+                      style: "cancel",
+                    },
+                    { text: "OK", onPress: () => console.log("OK Pressed") },
+                  ]
+                );
+              }}
+            >
+              <Image source={require("../assets/mood2.png")}></Image>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                Alert.alert("Mood Alert", "We are always here for you.", [
+                  {
+                    text: "Cancel",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel",
+                  },
+                  { text: "OK", onPress: () => console.log("OK Pressed") },
+                ]);
+              }}
+            >
+              <Image source={require("../assets/mood3.png")}></Image>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                Alert.alert(
+                  "Mood Alert",
+                  "It can happen to anyone. Keep calm and be happy.",
+                  [
+                    {
+                      text: "Cancel",
+                      onPress: () => console.log("Cancel Pressed"),
+                      style: "cancel",
+                    },
+                    { text: "OK", onPress: () => console.log("OK Pressed") },
+                  ]
+                );
+              }}
+            >
+              <Image source={require("../assets/mood4.png")}></Image>
+            </TouchableOpacity>
+          </View>
+
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginTop: 20,
+            }}
           >
             <Text
               style={[
                 styles.text,
-                { color: "#0A94FF", fontSize: 14, fontWeight: "800" },
+                { fontSize: 18, fontWeight: "800", letterSpacing: 0.75 },
               ]}
             >
-              See All
+              Upcoming schedule?
             </Text>
-          </TouchableOpacity>
-        </View>
-        <ScheduleCardHome
-          Key={upComingSchedule ? upComingSchedule.id : Math.random()}
-          dateTime={
-            upComingSchedule ? upComingSchedule.engagement.timestamp : ""
-          }
-          DocName={upComingSchedule ? upComingSchedule.docdata1.doc_name : ""}
-          Qualification={
-            upComingSchedule ? upComingSchedule.docdata1.qualification : ""
-          }
-          profile={upComingSchedule ? upComingSchedule.docdata1.prof_pic : ""}
-        />
-        {/* <View
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("ScheduleScreen");
+              }}
+            >
+              <Text
+                style={[
+                  styles.text,
+                  { color: "#0A94FF", fontSize: 14, fontWeight: "800" },
+                ]}
+              >
+                See All
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <ScheduleCardHome
+            Key={upComingSchedule ? upComingSchedule.id : Math.random()}
+            dateTime={
+              upComingSchedule ? upComingSchedule.metadata.startTime : ""
+            }
+            DocName={upComingSchedule ? upComingSchedule.docdata1.doc_name : ""}
+            Qualification={
+              upComingSchedule ? upComingSchedule.docdata1.qualification : ""
+            }
+            profile={upComingSchedule ? upComingSchedule.docdata1.prof_pic : ""}
+          />
+          {/* <View
           style={{
             flexDirection: "row",
             justifyContent: "space-between",
@@ -325,54 +344,58 @@ const Home2 = ({ navigation }: any) => {
           <ActDocCircle />
           <ActDocCircle />
         </ScrollView> */}
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginTop: 30,
-          }}
-        >
-          <Text
-            style={[
-              styles.text,
-              { fontSize: 18, fontWeight: "800", letterSpacing: 0.75 },
-            ]}
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginTop: 30,
+            }}
           >
-            Top rated Doctors
-          </Text>
-          <TouchableOpacity>
             <Text
               style={[
                 styles.text,
-                { color: "#0A94FF", fontSize: 14, fontWeight: "800" },
+                { fontSize: 18, fontWeight: "800", letterSpacing: 0.75 },
               ]}
             >
-              See All
+              Top rated Doctors
             </Text>
-          </TouchableOpacity>
-        </View>
-        <ScrollView
-          horizontal={true}
-          style={{ marginBottom: 50, flex: 1 }}
-          showsHorizontalScrollIndicator={false}
-        >
-          {docData.map((item: any, index) => {
-            return (
-              <DoctorReviewCard
-                key={index}
-                profile={item.prof_pic}
-                Qualification={item.qualification}
-                DocName={item.doc_name}
-                Rating={item.rating}
-                onPress={() => {
-                  DocDetailScreen(item);
-                }}
-              />
-            );
-          })}
-        </ScrollView>
-      </SafeAreaView>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("ViewAllDocs")}
+            >
+              <Text
+                style={[
+                  styles.text,
+                  { color: "#0A94FF", fontSize: 14, fontWeight: "800" },
+                ]}
+              >
+                See All
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <ScrollView
+            horizontal={true}
+            style={{ marginBottom: 85, flex: 1 }}
+            showsHorizontalScrollIndicator={false}
+          >
+            {docData.map((item: any, index) => {
+              return (
+                <DoctorReviewCard
+                  key={index}
+                  profile={item.prof_pic}
+                  Qualification={item.qualification}
+                  DocName={item.doc_name}
+                  Rating={item.rating}
+                  onPress={() => {
+                    DocDetailScreen(item);
+                  }}
+                />
+              );
+            })}
+          </ScrollView>
+        </SafeAreaView>
+      </ScrollView>
+
       <View style={styles.bottomNav}>
         <TouchableOpacity
           style={{ justifyContent: "center", alignItems: "center" }}
@@ -441,8 +464,40 @@ const Home2 = ({ navigation }: any) => {
             Account
           </Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          style={{ justifyContent: "center", alignItems: "center" }}
+          onPress={() => {
+            navigation.navigate("ViewAllDocs");
+          }}
+        >
+          <Fontisto name="doctor" size={24} color="#A9A9A9" />
+          <Text
+            style={[
+              styles.text,
+              { fontSize: 14, fontWeight: "400", color: "#A9A9A9" },
+            ]}
+          >
+            Professionals
+          </Text>
+        </TouchableOpacity>
+        {/* <TouchableOpacity
+          style={{ justifyContent: "center", alignItems: "center" }}
+          onPress={() => {
+            Linking.openURL(`tel:${'+91 9082588340'}`)
+          }}
+        >
+          <AntDesign name="customerservice" size={24} color="rgba(169, 169, 169, 1)" />
+          <Text
+            style={[
+              styles.text,
+              { fontSize: 14, fontWeight: "400", color: "#A9A9A9" },
+            ]}
+          >
+            Support
+          </Text>
+        </TouchableOpacity> */}
       </View>
-    </ScrollView>
+    </>
   );
 };
 
@@ -463,6 +518,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-evenly",
     alignItems: "center",
+    position: "absolute",
+    bottom: 0,
+    width: "100%",
   },
 });
 

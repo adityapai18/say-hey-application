@@ -9,17 +9,43 @@ import {
   Pressable,
   ScrollView,
   StatusBar,
+  ActivityIndicator,
 } from "react-native";
-import { Button } from "@rneui/base";
 import { AppointmentCard } from "../components/AppointmentCard";
 import { COLORS, FONTS, SHADOWS } from "../constants";
 import { useAuth } from "../lib/auth/AuthContext";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { meetData } from "../lib/api/Connection";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 const MyProfile = ({ navigation }: any) => {
   const auth = useAuth();
+  const [refreshing, setrefreshing] = useState(false);
+  const [docsTotal, setdocsTotal] = useState([]);
+  const [totalApp, settotal] = useState(0);
+  useEffect(() => {
+    setrefreshing(true)
+    meetData(auth?.user.email).then((value) => {
+      if (value.data.appointments) {
+        settotal(value.data.appointments.length);
+        var arr: any = value.data.appointments;
+        var clean = arr.filter(
+          (curr, index, self) =>
+            index ===
+            self.findIndex(
+              (t) => t.docdata1.doc_name === curr.docdata1.doc_name
+            )
+        );
+        clean.map((item) => console.log(item));
+        setdocsTotal(clean);
+        setrefreshing(false)
+      }
+    }).catch(err=>setrefreshing(false))
+  }, []);
+  // var clean = arr.filter((arr, index, self) =>
+  //   index === self.findIndex((t) => (t.save === arr.save && t.State === arr.State)))
   return (
-    <ScrollView>
-      <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
         <View style={{ marginTop: 15, flexDirection: "row" }}>
           <View style={styles.profilePic}>
             <Image
@@ -96,7 +122,7 @@ const MyProfile = ({ navigation }: any) => {
             >
               Appointments
             </Text>
-            <Text>27</Text>
+            <Text>{totalApp}</Text>
           </View>
           <View style={{ justifyContent: "center", alignItems: "center" }}>
             <Text
@@ -111,16 +137,31 @@ const MyProfile = ({ navigation }: any) => {
             >
               My Doctors
             </Text>
-            <Text>10</Text>
+            <Text>{docsTotal.length}</Text>
           </View>
         </View>
-        <AppointmentCard
-          image={require("../assets/AppointmentDoc1.png")}
-          name={"Dr. Penny Tool"}
-          stream={"Gynecologist"}
-          address={"931 0lmstead RD - 750m away"}
-          dateTime={"March 31, 2019 / 9:00 AM"}
+        <ActivityIndicator
+          animating={refreshing}
+          size="large"
+          style={{
+            zIndex: 1,
+            display:refreshing?'flex':'none'
+          }}
+          color="#0A94FF"
         />
+        <View style={{ flex: 1 }}>
+          {docsTotal &&
+            docsTotal.map((item) => (
+              <AppointmentCard
+                image={{ uri: item.docdata1.prof_pic }}
+                name={item.docdata1.doc_name}
+                stream={item.docdata1.doc_pass}
+                exp={item.docdata1.experience}
+                fee={item.docdata1.price}
+              />
+            ))}
+        </View>
+        {/* 
         <AppointmentCard
           image={require("../assets/AppointmentDoc2.png")}
           name={"Dr. Gustav Purpleson"}
@@ -141,9 +182,9 @@ const MyProfile = ({ navigation }: any) => {
           stream={"Dermatologist"}
           address={"931 0lmstead RD - 750m away"}
           dateTime={"July 20, 2019 / 10:30 AM"}
-        />
-      </SafeAreaView>
-    </ScrollView>
+        /> */}
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
@@ -152,7 +193,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingLeft: 16,
     paddingRight: 16,
-    paddingTop: 16,
     backgroundColor: COLORS.offWhite,
   },
 
